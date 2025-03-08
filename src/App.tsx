@@ -4,8 +4,10 @@ import SearchView from "./components/SearchView";
 import FilterView from "./components/FilterView";
 
 function App() {
+  // Placeholder values for listings
   const listingsSet = [
     {
+      id: 1,
       imageSrc: HiltonImage,
       hotelName: "Hilton",
       cityName: "Montreal",
@@ -15,6 +17,7 @@ function App() {
       price: 135,
     },
     {
+      id: 2,
       imageSrc: HiltonImage,
       hotelName: "Hilton",
       cityName: "Montreal",
@@ -24,6 +27,7 @@ function App() {
       price: 135,
     },
     {
+      id: 3,
       imageSrc: HiltonImage,
       hotelName: "Hilton",
       cityName: "Montreal",
@@ -33,6 +37,7 @@ function App() {
       price: 135,
     },
     {
+      id: 4,
       imageSrc: HiltonImage,
       hotelName: "Hilton",
       cityName: "Montreal",
@@ -42,6 +47,7 @@ function App() {
       price: 135,
     },
     {
+      id: 5,
       imageSrc: HiltonImage,
       hotelName: "Hilton",
       cityName: "Montreal",
@@ -51,6 +57,7 @@ function App() {
       price: 135,
     },
     {
+      id: 6,
       imageSrc: HiltonImage,
       hotelName: "Hilton",
       cityName: "Montreal",
@@ -60,6 +67,7 @@ function App() {
       price: 135,
     },
     {
+      id: 7,
       imageSrc: HiltonImage,
       hotelName: "Hilton",
       cityName: "Montreal",
@@ -71,10 +79,13 @@ function App() {
   ];
 
   return (
-    <div className="container" style={{ width: "65%", margin: "auto" }}>
+    <div className="container" style={{ width: "80%", margin: "auto" }}>
       <div className="row">
-        <div className="col-3">
-          <FilterView></FilterView>
+        <div
+          className="col-3"
+          style={{ marginTop: "1em", borderRight: "3px solid" }}
+        >
+          <FilterView />
         </div>
         <div className="col">
           <SearchView />

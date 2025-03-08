@@ -5,6 +5,7 @@ import Listing from "./Listing";
 
 interface Props {
   listings: {
+    id: number;
     imageSrc: string;
     hotelName: string;
     cityName: string;
@@ -25,7 +26,7 @@ const ListingView = ({ listings }: Props) => {
           <div className="col dropdown">
             <p>Sort by</p>
             <button
-              className="btn btn-secondary dropdown-toggle"
+              className="btn btn-primary dropdown-toggle"
               type="button"
               data-bs-toggle="dropdown"
               aria-expanded="false"
@@ -53,7 +54,7 @@ const ListingView = ({ listings }: Props) => {
       </div>
       <div className="row row-cols-1 row-cols-md-3 g-4">
         {listings.map((listing) => (
-          <div className="col">
+          <div className="col" key={listing.id}>
             <Listing
               imageSrc={listing.imageSrc}
               hotelName={listing.hotelName}

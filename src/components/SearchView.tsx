@@ -23,7 +23,7 @@ const SearchView = () => {
           </div>
           <button
             type="submit"
-            className="col btn btn-secondary"
+            className="col btn btn-primary"
             style={{ height: "40%", margin: "2em" }}
           >
             Search

@@ -45,7 +45,7 @@ const Listing = ({
               <b>CA ${price}</b>
             </div>
             <div className="col"></div>
-            <button className="col btn btn-secondary">Book</button>
+            <button className="col btn btn-primary">Book</button>
           </div>
         </li>
       </ul>
