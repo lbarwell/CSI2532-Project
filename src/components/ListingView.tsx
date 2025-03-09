@@ -40,6 +40,11 @@ const ListingView = ({ listings }: Props) => {
             >
               <li>
                 <a className="dropdown-item" href="#">
+                  Star rating
+                </a>
+              </li>
+              <li>
+                <a className="dropdown-item" href="#">
                   Price: low to high
                 </a>
               </li>

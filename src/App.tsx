@@ -1,98 +1,15 @@
-import HiltonImage from "./assets/hilton-montreal.avif";
-import ListingView from "./components/ListingView";
-import SearchView from "./components/SearchView";
-import FilterView from "./components/FilterView";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
+import SearchPage from "./pages/SearchPage";
+import Home from "./pages/Home";
 
 function App() {
-  // Placeholder values for listings
-  const listingsSet = [
-    {
-      id: 1,
-      imageSrc: HiltonImage,
-      hotelName: "Hilton",
-      cityName: "Montreal",
-      stateName: "QC",
-      rating: "4 stars",
-      amenities: "Pool",
-      price: 135,
-    },
-    {
-      id: 2,
-      imageSrc: HiltonImage,
-      hotelName: "Hilton",
-      cityName: "Montreal",
-      stateName: "QC",
-      rating: "4 stars",
-      amenities: "Pool",
-      price: 135,
-    },
-    {
-      id: 3,
-      imageSrc: HiltonImage,
-      hotelName: "Hilton",
-      cityName: "Montreal",
-      stateName: "QC",
-      rating: "4 stars",
-      amenities: "Pool",
-      price: 135,
-    },
-    {
-      id: 4,
-      imageSrc: HiltonImage,
-      hotelName: "Hilton",
-      cityName: "Montreal",
-      stateName: "QC",
-      rating: "4 stars",
-      amenities: "Pool",
-      price: 135,
-    },
-    {
-      id: 5,
-      imageSrc: HiltonImage,
-      hotelName: "Hilton",
-      cityName: "Montreal",
-      stateName: "QC",
-      rating: "4 stars",
-      amenities: "Pool",
-      price: 135,
-    },
-    {
-      id: 6,
-      imageSrc: HiltonImage,
-      hotelName: "Hilton",
-      cityName: "Montreal",
-      stateName: "QC",
-      rating: "4 stars",
-      amenities: "Pool",
-      price: 135,
-    },
-    {
-      id: 7,
-      imageSrc: HiltonImage,
-      hotelName: "Hilton",
-      cityName: "Montreal",
-      stateName: "QC",
-      rating: "4 stars",
-      amenities: "Pool",
-      price: 135,
-    },
-  ];
-
   return (
-    <div className="container" style={{ width: "80%", margin: "auto" }}>
-      <div className="row">
-        <div
-          className="col-3"
-          style={{ marginTop: "1em", borderRight: "3px solid" }}
-        >
-          <FilterView />
-        </div>
-        <div className="col">
-          <SearchView />
-          <ListingView listings={listingsSet} />
-        </div>
-      </div>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/search" element={<SearchPage />} />
+      </Routes>
+    </Router>
   );
 }
 
