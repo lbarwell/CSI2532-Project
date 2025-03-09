@@ -1,6 +1,6 @@
 const SearchView = () => {
   return (
-    <form style={{ margin: "1em", borderBottom: "solid" }}>
+    <form style={{ margin: "1em", borderBottom: "solid lightgray" }}>
       <div className="container">
         <div className="row">
           <div className="col mb-3">

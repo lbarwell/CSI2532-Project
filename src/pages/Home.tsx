@@ -1,10 +1,19 @@
-import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 const Home = () => {
   return (
     <>
-      <div>Home</div>
-      <Link to={"/search"}>Search</Link>
+      <Navbar />
+      <h1
+        style={{
+          margin: "auto",
+          width: "50%",
+          textAlign: "center",
+          marginTop: "300px",
+        }}
+      >
+        Home
+      </h1>
     </>
   );
 };
