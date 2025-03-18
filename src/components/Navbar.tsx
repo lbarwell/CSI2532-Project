@@ -29,6 +29,15 @@ const Navbar = () => {
                 Search
               </a>
             </li>
+            <li className="nav-item">
+              <a
+                className="nav-link active"
+                aria-current="page"
+                href="/#/employees"
+              >
+                Employees
+              </a>
+            </li>
           </ul>
           <div className="nav-item">
             <a className="nav-link active" aria-current="page" href="/">
