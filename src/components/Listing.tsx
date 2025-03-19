@@ -19,7 +19,7 @@ const Listing = ({
 }: Props) => {
   return (
     <div className="card">
-      <img src={imageSrc} className="card-img-top" alt="No image" />
+      <img src={imageSrc} className="card-img-top" alt="Listing image" />
       <div className="container card-body">
         <div className="row">
           <div className="col">
