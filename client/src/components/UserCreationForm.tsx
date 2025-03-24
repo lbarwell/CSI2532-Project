@@ -1,7 +1,7 @@
 const UserCreationForm = () => {
   return (
     <div style={{ marginTop: "1em", padding: "1em" }}>
-      <h1>Book your stay</h1>
+      <h2>Book your stay</h2>
       <form className="row g-3 needs-validation" noValidate>
         <div className="col-md-6">
           <label htmlFor="validationCustom01" className="form-label">

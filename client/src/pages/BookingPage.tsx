@@ -1,6 +1,6 @@
 import Navbar from "../components/Navbar";
 import HotelPanel from "../components/HotelPanel";
-import BookingForm from "../components/BookingForm";
+import BookingForm from "../components/AvailabilityForm";
 import UserCreationForm from "../components/UserCreationForm";
 
 interface Props {

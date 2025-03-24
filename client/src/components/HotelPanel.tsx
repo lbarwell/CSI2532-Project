@@ -80,7 +80,7 @@ const HotelPanel = ({ propHotelID }: Props) => {
         </div>
 
         <div className="row" style={{ textAlign: "center", marginTop: "2em" }}>
-          <h5>CAD ${listingInfo.price} per night</h5>
+          <h5>CAD ${listingInfo.price} per night (one bed)</h5>
         </div>
       </div>
     </div>
