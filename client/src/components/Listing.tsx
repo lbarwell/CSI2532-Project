@@ -12,49 +12,44 @@ interface Props {
   price: number;
 }
 
-const Listing = ({
-  imageSrc,
-  hotelID,
-  hotelName,
-  cityName,
-  stateName,
-  rating,
-  amenities,
-  price,
-}: Props) => {
+const Listing = (listingInfo: Props) => {
   const bookingContext = useContext(BookingContext);
 
   function buttonBookClicked() {
-    bookingContext.setHotelID(hotelID);
-    location.href = `/#/booking/${hotelID}`;
+    bookingContext.setHotelID(listingInfo.hotelID);
+    location.href = `/#/booking/${listingInfo.hotelID}`;
   }
 
   return (
     <div className="card">
-      <img src={imageSrc} className="card-img-top" alt="Listing image" />
+      <img
+        src={listingInfo.imageSrc}
+        className="card-img-top"
+        alt="Listing image"
+      />
       <div className="container card-body">
         <div className="row">
           <div className="col">
             <h5 className="cardTitle" id="hotelName">
-              {hotelName}
+              {listingInfo.hotelName}
             </h5>
             <p className="card-text">
-              {cityName}, {stateName}
+              {listingInfo.cityName}, {listingInfo.stateName}
             </p>
           </div>
           <div className="col" style={{ textAlign: "right" }}>
-            {rating}
+            {listingInfo.rating}
           </div>
         </div>
       </div>
       <ul className="list-group list-group-flush">
         <li className="list-group-item" id="amenities">
-          {amenities}
+          {listingInfo.amenities}
         </li>
         <li className="container list-group-item">
           <div className="row">
             <div className="col" id="price">
-              <b>CA ${price}</b>
+              <b>CA ${listingInfo.price}</b>
             </div>
             <div className="col"></div>
             <button className="col btn btn-primary" onClick={buttonBookClicked}>
