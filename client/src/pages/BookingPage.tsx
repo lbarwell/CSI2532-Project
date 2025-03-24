@@ -2,19 +2,18 @@ import Navbar from "../components/Navbar";
 import HotelPanel from "../components/HotelPanel";
 import BookingForm from "../components/AvailabilityForm";
 import UserCreationForm from "../components/UserCreationForm";
+import { useParams } from "react-router-dom";
 
-interface Props {
-  propHotelID: number;
-}
+const BookingPage = () => {
+  const { hotelID } = useParams();
 
-const BookingPage = ({ propHotelID }: Props) => {
   return (
     <>
       <Navbar />
       <div className="container" style={{ width: "80%", margin: "auto" }}>
         <div className="row">
           <div className="col-4">
-            <HotelPanel propHotelID={propHotelID} />
+            <HotelPanel propHotelID={Number(hotelID)} />
           </div>
           <div className="col">
             <BookingForm />

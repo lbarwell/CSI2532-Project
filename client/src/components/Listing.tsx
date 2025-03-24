@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { BookingContext } from "../context";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   imageSrc: string;
@@ -13,11 +14,10 @@ interface Props {
 }
 
 const Listing = (listingInfo: Props) => {
-  const bookingContext = useContext(BookingContext);
+  const navigate = useNavigate();
 
   function buttonBookClicked() {
-    bookingContext.setHotelID(listingInfo.hotelID);
-    location.href = `/#/booking/${listingInfo.hotelID}`;
+    navigate(`/booking/${listingInfo.hotelID}`);
   }
 
   return (

@@ -1,33 +1,18 @@
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
-import { useState } from "react";
 
 import SearchPage from "./pages/SearchPage";
 import HomePage from "./pages/HomePage";
 import EmployeePage from "./pages/EmployeePage";
 import BookingPage from "./pages/BookingPage";
 
-import { BookingContext } from "./context";
-
 function App() {
-  const [hotelID, setHotelID] = useState(1);
-
   return (
     <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route
-          path="/search"
-          element={
-            <BookingContext.Provider value={{ hotelID, setHotelID }}>
-              <SearchPage />
-            </BookingContext.Provider>
-          }
-        />
+        <Route path="/search" element={<SearchPage />} />
         <Route path="/employees" element={<EmployeePage />} />
-        <Route
-          path={`/booking/${hotelID}`}
-          element={<BookingPage propHotelID={hotelID} />}
-        />
+        <Route path={`/booking/:hotelID`} element={<BookingPage />} />
       </Routes>
     </Router>
   );
