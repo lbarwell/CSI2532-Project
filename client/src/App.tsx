@@ -1,10 +1,12 @@
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
+import { useState } from "react";
+
 import SearchPage from "./pages/SearchPage";
 import HomePage from "./pages/HomePage";
 import EmployeePage from "./pages/EmployeePage";
 import BookingPage from "./pages/BookingPage";
+
 import { BookingContext } from "./context";
-import { useState } from "react";
 
 function App() {
   const [hotelID, setHotelID] = useState(1);

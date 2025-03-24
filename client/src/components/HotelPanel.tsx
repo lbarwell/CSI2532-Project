@@ -58,6 +58,7 @@ const HotelPanel = ({ propHotelID }: Props) => {
         >
           {amenitiesArray.map((amenity) => (
             <div
+              key={amenitiesArray.indexOf(amenity).toString()}
               className="col"
               style={{
                 textAlign: "center",
