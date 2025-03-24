@@ -1,10 +1,14 @@
 import Navbar from "../components/Navbar";
 
-const EmployeePage = () => {
+interface Props {
+  propHotelID: number;
+}
+
+const BookingPage = ({ propHotelID }: Props) => {
   return (
     <>
       <Navbar />
-      <h1
+      <div
         style={{
           margin: "auto",
           width: "50%",
@@ -12,10 +16,11 @@ const EmployeePage = () => {
           marginTop: "300px",
         }}
       >
-        Employees
-      </h1>
+        <h1>Booking</h1>
+        <h2>Hotel ID: {propHotelID}</h2>
+      </div>
     </>
   );
 };
 
-export default EmployeePage;
+export default BookingPage;

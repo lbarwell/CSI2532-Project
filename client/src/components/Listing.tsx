@@ -1,5 +1,9 @@
+import { useContext } from "react";
+import { BookingContext } from "../context";
+
 interface Props {
   imageSrc: string;
+  hotelID: number;
   hotelName: string;
   cityName: string;
   stateName: string;
@@ -10,6 +14,7 @@ interface Props {
 
 const Listing = ({
   imageSrc,
+  hotelID,
   hotelName,
   cityName,
   stateName,
@@ -17,6 +22,13 @@ const Listing = ({
   amenities,
   price,
 }: Props) => {
+  const bookingContext = useContext(BookingContext);
+
+  function buttonBookClicked() {
+    bookingContext.setHotelID(hotelID);
+    location.href = `/#/booking/${hotelID}`;
+  }
+
   return (
     <div className="card">
       <img src={imageSrc} className="card-img-top" alt="Listing image" />
@@ -45,7 +57,9 @@ const Listing = ({
               <b>CA ${price}</b>
             </div>
             <div className="col"></div>
-            <button className="col btn btn-primary">Book</button>
+            <button className="col btn btn-primary" onClick={buttonBookClicked}>
+              Book
+            </button>
           </div>
         </li>
       </ul>

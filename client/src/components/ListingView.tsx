@@ -62,6 +62,7 @@ const ListingView = ({ listings }: Props) => {
           <div className="col" key={listing.id}>
             <Listing
               imageSrc={listing.imageSrc}
+              hotelID={listing.id}
               hotelName={listing.hotelName}
               cityName={listing.cityName}
               stateName={listing.stateName}
