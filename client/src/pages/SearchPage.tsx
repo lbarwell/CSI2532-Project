@@ -10,7 +10,7 @@ const SearchPage = () => {
       <div className="container" style={{ width: "80%", margin: "auto" }}>
         <SearchView />
         <div className="row">
-          <div className="col-3" style={{ marginTop: "1em" }}>
+          <div className="col-3">
             <FilterView />
           </div>
           <div className="col">
