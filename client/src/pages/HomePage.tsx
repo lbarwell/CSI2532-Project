@@ -9,13 +9,13 @@ const Home = () => {
         style={{
           backgroundImage: `url(${HomePageImage})`,
           backgroundPosition: "center",
-          height: "100vh",
+          height: "91.2vh",
         }}
       >
         <h1
           style={{
             margin: "auto",
-            padding: "1em",
+            padding: "0.8em",
             width: "50%",
             textAlign: "center",
           }}
@@ -30,7 +30,7 @@ const Home = () => {
             backgroundColor: "white",
             width: "50%",
             margin: "auto",
-            marginTop: "12em",
+            marginTop: "14em",
             padding: "1em",
             paddingLeft: "2em",
             paddingRight: "2em",
