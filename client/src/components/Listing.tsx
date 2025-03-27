@@ -1,5 +1,3 @@
-import { useContext } from "react";
-import { BookingContext } from "../context";
 import { useNavigate } from "react-router-dom";
 
 interface Props {
@@ -15,10 +13,6 @@ interface Props {
 
 const Listing = (listingInfo: Props) => {
   const navigate = useNavigate();
-
-  function buttonBookClicked() {
-    navigate(`/booking/${listingInfo.hotelID}`);
-  }
 
   return (
     <div className="card">
@@ -52,7 +46,10 @@ const Listing = (listingInfo: Props) => {
               <b>CA ${listingInfo.price}</b>
             </div>
             <div className="col"></div>
-            <button className="col btn btn-primary" onClick={buttonBookClicked}>
+            <button
+              className="col btn btn-primary"
+              onClick={() => navigate(`/booking/${listingInfo.hotelID}`)}
+            >
               Book
             </button>
           </div>

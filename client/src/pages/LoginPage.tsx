@@ -1,11 +1,16 @@
+import { useContext } from "react";
 import Navbar from "../components/Navbar";
+import { LoginContext } from "../context";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
+  const { isLoggedIn, setLoggedIn } = useContext(LoginContext);
+  const navigate = useNavigate();
+
   return (
     <>
       <Navbar />
       <form
-        action="#/employees/1"
         className="bg-body-tertiary"
         style={{
           margin: "auto",
@@ -41,6 +46,11 @@ const LoginPage = () => {
           type="submit"
           className="btn btn-primary"
           style={{ width: "100%", marginTop: "1em" }}
+          onClick={() => {
+            setLoggedIn(true);
+            console.log(isLoggedIn);
+            navigate("/employees/1");
+          }}
         >
           Login
         </button>
