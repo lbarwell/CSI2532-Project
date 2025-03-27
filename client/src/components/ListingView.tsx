@@ -2,21 +2,83 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 
 import Listing from "./Listing";
+import HiltonImage from "../assets/hilton-montreal.avif";
 
-interface Props {
-  listings: {
-    id: number;
-    imageSrc: string;
-    hotelName: string;
-    cityName: string;
-    stateName: string;
-    rating: string;
-    amenities: string;
-    price: number;
-  }[];
-}
+const ListingView = () => {
+  // Placeholder data, fetch the actual listings from the database
+  const listings = [
+    {
+      id: 1,
+      imageSrc: HiltonImage,
+      hotelName: "Hilton",
+      cityName: "Montreal",
+      stateName: "QC",
+      rating: "4 stars",
+      amenities: "Pool",
+      price: 135,
+    },
+    {
+      id: 2,
+      imageSrc: HiltonImage,
+      hotelName: "Hilton",
+      cityName: "Montreal",
+      stateName: "QC",
+      rating: "4 stars",
+      amenities: "Pool",
+      price: 135,
+    },
+    {
+      id: 3,
+      imageSrc: HiltonImage,
+      hotelName: "Hilton",
+      cityName: "Montreal",
+      stateName: "QC",
+      rating: "4 stars",
+      amenities: "Pool",
+      price: 135,
+    },
+    {
+      id: 4,
+      imageSrc: HiltonImage,
+      hotelName: "Hilton",
+      cityName: "Montreal",
+      stateName: "QC",
+      rating: "4 stars",
+      amenities: "Pool",
+      price: 135,
+    },
+    {
+      id: 5,
+      imageSrc: HiltonImage,
+      hotelName: "Hilton",
+      cityName: "Montreal",
+      stateName: "QC",
+      rating: "4 stars",
+      amenities: "Pool",
+      price: 135,
+    },
+    {
+      id: 6,
+      imageSrc: HiltonImage,
+      hotelName: "Hilton",
+      cityName: "Montreal",
+      stateName: "QC",
+      rating: "4 stars",
+      amenities: "Pool",
+      price: 135,
+    },
+    {
+      id: 7,
+      imageSrc: HiltonImage,
+      hotelName: "Hilton",
+      cityName: "Montreal",
+      stateName: "QC",
+      rating: "4 stars",
+      amenities: "Pool",
+      price: 135,
+    },
+  ];
 
-const ListingView = ({ listings }: Props) => {
   return (
     <div style={{ margin: "1em" }}>
       <div className="container" style={{ margin: "1em" }}>
@@ -62,6 +124,7 @@ const ListingView = ({ listings }: Props) => {
           <div className="col" key={listing.id}>
             <Listing
               imageSrc={listing.imageSrc}
+              hotelID={listing.id}
               hotelName={listing.hotelName}
               cityName={listing.cityName}
               stateName={listing.stateName}

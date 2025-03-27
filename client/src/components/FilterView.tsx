@@ -1,12 +1,14 @@
 const FilterView = () => {
   return (
     <div
+      className="bg-body-tertiary"
       style={{
-        height: "100%",
-        margin: "1em",
+        marginTop: "1em",
+        padding: "1em",
+        borderRadius: "1em",
       }}
     >
-      <h3>Filter by</h3>
+      <h3 style={{ textAlign: "center" }}>Filters</h3>
 
       <button
         type="submit"
@@ -74,6 +76,17 @@ const FilterView = () => {
         <label className="form-label" style={{ marginTop: "3em" }}>
           <b>Amenities</b>
         </label>
+        <div className="form-check">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            value=""
+            id="selectAllCheckbox"
+          />
+          <label className="form-check-label" htmlFor="selectAllCheckbox">
+            Select all
+          </label>
+        </div>
         <div className="form-check">
           <input
             className="form-check-input"

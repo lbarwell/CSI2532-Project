@@ -31,7 +31,7 @@ const Navbar = () => {
             </li>
           </ul>
           <div className="nav-item">
-            <a className="nav-link active" aria-current="page" href="/#/employees">
+            <a className="nav-link active" aria-current="page" href="/#/login">
               Employees
             </a>
           </div>
