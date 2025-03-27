@@ -6,17 +6,17 @@ import HiltonImage from "../assets/hilton-montreal.avif";
 import { useEffect, useState } from "react";
 
 interface Hotel {
-  id: number;
-  name: string;
-  chainid: number;
-  streetNumber: number;
-  streetName: string;
+  chain_number: number;
   city: string;
-  state: string;
-  zipCode: string;
   email: string;
+  hotel_number: number;
+  manager_id: number;
+  name: string;
   phone: string;
-  managerID: number;
+  state: string;
+  street_name: string;
+  street_number: number;
+  zip_code: string;
 }
 
 const ListingView = () => {
@@ -36,8 +36,6 @@ const ListingView = () => {
   useEffect(() => {
     getHotels();
   }, []);
-
-  console.log(hotels);
 
   return (
     <div style={{ margin: "1em" }}>
@@ -83,10 +81,10 @@ const ListingView = () => {
       </div>
       <div className="row row-cols-1 row-cols-md-3 g-4">
         {hotels.map((hotel) => (
-          <div className="col" key={hotel.id}>
+          <div className="col" key={hotel.hotel_number}>
             <Listing
               imageSrc={HiltonImage}
-              hotelID={hotel.id}
+              hotelID={hotel.hotel_number}
               hotelName={hotel.name}
               cityName={hotel.city}
               stateName={hotel.state}
