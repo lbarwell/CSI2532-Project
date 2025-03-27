@@ -4,6 +4,7 @@ const FilterView = () => {
       className="bg-body-tertiary"
       style={{
         marginTop: "1em",
+        marginBottom: "1em",
         padding: "1em",
         borderRadius: "1em",
       }}

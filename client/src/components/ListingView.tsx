@@ -3,87 +3,49 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 
 import Listing from "./Listing";
 import HiltonImage from "../assets/hilton-montreal.avif";
+import { useEffect, useState } from "react";
+
+interface Hotel {
+  id: number;
+  name: string;
+  chainid: number;
+  streetNumber: number;
+  streetName: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  email: string;
+  phone: string;
+  managerID: number;
+}
 
 const ListingView = () => {
-  // Placeholder data, fetch the actual listings from the database
-  const listings = [
-    {
-      id: 1,
-      imageSrc: HiltonImage,
-      hotelName: "Hilton",
-      cityName: "Montreal",
-      stateName: "QC",
-      rating: "4 stars",
-      amenities: "Pool",
-      price: 135,
-    },
-    {
-      id: 2,
-      imageSrc: HiltonImage,
-      hotelName: "Hilton",
-      cityName: "Montreal",
-      stateName: "QC",
-      rating: "4 stars",
-      amenities: "Pool",
-      price: 135,
-    },
-    {
-      id: 3,
-      imageSrc: HiltonImage,
-      hotelName: "Hilton",
-      cityName: "Montreal",
-      stateName: "QC",
-      rating: "4 stars",
-      amenities: "Pool",
-      price: 135,
-    },
-    {
-      id: 4,
-      imageSrc: HiltonImage,
-      hotelName: "Hilton",
-      cityName: "Montreal",
-      stateName: "QC",
-      rating: "4 stars",
-      amenities: "Pool",
-      price: 135,
-    },
-    {
-      id: 5,
-      imageSrc: HiltonImage,
-      hotelName: "Hilton",
-      cityName: "Montreal",
-      stateName: "QC",
-      rating: "4 stars",
-      amenities: "Pool",
-      price: 135,
-    },
-    {
-      id: 6,
-      imageSrc: HiltonImage,
-      hotelName: "Hilton",
-      cityName: "Montreal",
-      stateName: "QC",
-      rating: "4 stars",
-      amenities: "Pool",
-      price: 135,
-    },
-    {
-      id: 7,
-      imageSrc: HiltonImage,
-      hotelName: "Hilton",
-      cityName: "Montreal",
-      stateName: "QC",
-      rating: "4 stars",
-      amenities: "Pool",
-      price: 135,
-    },
-  ];
+  const [hotels, setHotels] = useState<Hotel[]>([]);
+
+  const getHotels = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/hotels");
+      const jsonData = await response.json();
+
+      setHotels(jsonData);
+    } catch (error: any) {
+      console.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    getHotels();
+  }, []);
+
+  console.log(hotels);
 
   return (
     <div style={{ margin: "1em" }}>
       <div className="container" style={{ margin: "1em" }}>
         <div className="row">
-          <p className="col">{listings.length} listings</p>
+          <p className="col">
+            {hotels.length} listing{hotels.length === 1 ? "" : "s"}
+          </p>
           <div className="col"></div>
           <div className="col dropdown">
             <p>Sort by</p>
@@ -120,17 +82,17 @@ const ListingView = () => {
         </div>
       </div>
       <div className="row row-cols-1 row-cols-md-3 g-4">
-        {listings.map((listing) => (
-          <div className="col" key={listing.id}>
+        {hotels.map((hotel) => (
+          <div className="col" key={hotel.id}>
             <Listing
-              imageSrc={listing.imageSrc}
-              hotelID={listing.id}
-              hotelName={listing.hotelName}
-              cityName={listing.cityName}
-              stateName={listing.stateName}
-              rating={listing.rating}
-              amenities={listing.amenities}
-              price={listing.price}
+              imageSrc={HiltonImage}
+              hotelID={hotel.id}
+              hotelName={hotel.name}
+              cityName={hotel.city}
+              stateName={hotel.state}
+              rating="unknown rating"
+              amenities="unknown amenities"
+              price={NaN}
             />
           </div>
         ))}

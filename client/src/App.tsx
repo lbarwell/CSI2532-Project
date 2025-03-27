@@ -10,7 +10,6 @@ import { LoginContext } from "./context";
 
 function App() {
   const [isLoggedIn, setLoggedIn] = useState(false);
-  console.log(isLoggedIn);
 
   return (
     <Router>
