@@ -17,14 +17,19 @@ interface Hotel {
   street_name: string;
   street_number: number;
   zip_code: string;
+  rating: number;
 }
 
 const ListingView = () => {
   const [hotels, setHotels] = useState<Hotel[]>([]);
 
-  const getHotels = async () => {
+  const getHotels = async (filters: { [key: string]: string }) => {
     try {
-      const response = await fetch("http://localhost:5000/hotels");
+      const params = new URLSearchParams(
+        filters as Record<string, string>
+      ).toString();
+      console.log(`http://localhost:5000/hotels?${params}`);
+      const response = await fetch(`http://localhost:5000/hotels?${params}`);
       const jsonData = await response.json();
 
       setHotels(jsonData);
@@ -34,7 +39,7 @@ const ListingView = () => {
   };
 
   useEffect(() => {
-    getHotels();
+    getHotels({ sort: "rating" });
   }, []);
 
   return (
@@ -42,7 +47,7 @@ const ListingView = () => {
       <div className="container" style={{ margin: "1em" }}>
         <div className="row">
           <p className="col">
-            {hotels.length} listing{hotels.length === 1 ? "" : "s"}
+            {hotels.length} hotel{hotels.length === 1 ? "" : "s"}
           </p>
           <div className="col"></div>
           <div className="col dropdown">
@@ -61,19 +66,26 @@ const ListingView = () => {
               style={{ width: "100%", textAlign: "right" }}
             >
               <li>
-                <a className="dropdown-item" href="#">
+                <a
+                  className="dropdown-item"
+                  onClick={() => getHotels({ sort: "name" })}
+                >
+                  Name
+                </a>
+              </li>
+              <li>
+                <a
+                  className="dropdown-item"
+                  onClick={() => getHotels({ sort: "rating" })}
+                >
                   Star rating
                 </a>
               </li>
               <li>
-                <a className="dropdown-item" href="#">
-                  Price: low to high
-                </a>
+                <a className="dropdown-item">Price: low to high</a>
               </li>
               <li>
-                <a className="dropdown-item" href="#">
-                  Price: high to low
-                </a>
+                <a className="dropdown-item">Price: high to low</a>
               </li>
             </ul>
           </div>
@@ -88,7 +100,7 @@ const ListingView = () => {
               hotelName={hotel.name}
               cityName={hotel.city}
               stateName={hotel.state}
-              rating="unknown rating"
+              rating={hotel.rating}
               amenities="unknown amenities"
               price={NaN}
             />
