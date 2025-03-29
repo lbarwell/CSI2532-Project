@@ -3,87 +3,52 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 
 import Listing from "./Listing";
 import HiltonImage from "../assets/hilton-montreal.avif";
+import { useEffect, useState } from "react";
+
+interface Hotel {
+  chain_number: number;
+  city: string;
+  email: string;
+  hotel_number: number;
+  manager_id: number;
+  name: string;
+  phone: string;
+  state: string;
+  street_name: string;
+  street_number: number;
+  zip_code: string;
+  rating: number;
+}
 
 const ListingView = () => {
-  // Placeholder data, fetch the actual listings from the database
-  const listings = [
-    {
-      id: 1,
-      imageSrc: HiltonImage,
-      hotelName: "Hilton",
-      cityName: "Montreal",
-      stateName: "QC",
-      rating: "4 stars",
-      amenities: "Pool",
-      price: 135,
-    },
-    {
-      id: 2,
-      imageSrc: HiltonImage,
-      hotelName: "Hilton",
-      cityName: "Montreal",
-      stateName: "QC",
-      rating: "4 stars",
-      amenities: "Pool",
-      price: 135,
-    },
-    {
-      id: 3,
-      imageSrc: HiltonImage,
-      hotelName: "Hilton",
-      cityName: "Montreal",
-      stateName: "QC",
-      rating: "4 stars",
-      amenities: "Pool",
-      price: 135,
-    },
-    {
-      id: 4,
-      imageSrc: HiltonImage,
-      hotelName: "Hilton",
-      cityName: "Montreal",
-      stateName: "QC",
-      rating: "4 stars",
-      amenities: "Pool",
-      price: 135,
-    },
-    {
-      id: 5,
-      imageSrc: HiltonImage,
-      hotelName: "Hilton",
-      cityName: "Montreal",
-      stateName: "QC",
-      rating: "4 stars",
-      amenities: "Pool",
-      price: 135,
-    },
-    {
-      id: 6,
-      imageSrc: HiltonImage,
-      hotelName: "Hilton",
-      cityName: "Montreal",
-      stateName: "QC",
-      rating: "4 stars",
-      amenities: "Pool",
-      price: 135,
-    },
-    {
-      id: 7,
-      imageSrc: HiltonImage,
-      hotelName: "Hilton",
-      cityName: "Montreal",
-      stateName: "QC",
-      rating: "4 stars",
-      amenities: "Pool",
-      price: 135,
-    },
-  ];
+  const [hotels, setHotels] = useState<Hotel[]>([]);
+
+  const getHotels = async (filters: { [key: string]: string }) => {
+    try {
+      const params = new URLSearchParams(
+        filters as Record<string, string>
+      ).toString();
+      console.log(`http://localhost:5000/hotels?${params}`);
+      const response = await fetch(`http://localhost:5000/hotels?${params}`);
+      const jsonData = await response.json();
+
+      setHotels(jsonData);
+    } catch (error: any) {
+      console.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    getHotels({ sort: "rating" });
+  }, []);
 
   return (
     <div style={{ margin: "1em" }}>
       <div className="container" style={{ margin: "1em" }}>
         <div className="row">
-          <p className="col">{listings.length} listings</p>
+          <p className="col">
+            {hotels.length} hotel{hotels.length === 1 ? "" : "s"}
+          </p>
           <div className="col"></div>
           <div className="col dropdown">
             <p>Sort by</p>
@@ -101,36 +66,43 @@ const ListingView = () => {
               style={{ width: "100%", textAlign: "right" }}
             >
               <li>
-                <a className="dropdown-item" href="#">
+                <a
+                  className="dropdown-item"
+                  onClick={() => getHotels({ sort: "name" })}
+                >
+                  Name
+                </a>
+              </li>
+              <li>
+                <a
+                  className="dropdown-item"
+                  onClick={() => getHotels({ sort: "rating" })}
+                >
                   Star rating
                 </a>
               </li>
               <li>
-                <a className="dropdown-item" href="#">
-                  Price: low to high
-                </a>
+                <a className="dropdown-item">Price: low to high</a>
               </li>
               <li>
-                <a className="dropdown-item" href="#">
-                  Price: high to low
-                </a>
+                <a className="dropdown-item">Price: high to low</a>
               </li>
             </ul>
           </div>
         </div>
       </div>
       <div className="row row-cols-1 row-cols-md-3 g-4">
-        {listings.map((listing) => (
-          <div className="col" key={listing.id}>
+        {hotels.map((hotel) => (
+          <div className="col" key={hotel.hotel_number}>
             <Listing
-              imageSrc={listing.imageSrc}
-              hotelID={listing.id}
-              hotelName={listing.hotelName}
-              cityName={listing.cityName}
-              stateName={listing.stateName}
-              rating={listing.rating}
-              amenities={listing.amenities}
-              price={listing.price}
+              imageSrc={HiltonImage}
+              hotelID={hotel.hotel_number}
+              hotelName={hotel.name}
+              cityName={hotel.city}
+              stateName={hotel.state}
+              rating={hotel.rating}
+              amenities="unknown amenities"
+              price={NaN}
             />
           </div>
         ))}

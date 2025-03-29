@@ -6,7 +6,7 @@ interface Props {
   hotelName: string;
   cityName: string;
   stateName: string;
-  rating: string;
+  rating: number;
   amenities: string;
   price: number;
 }
@@ -23,7 +23,7 @@ const Listing = (listingInfo: Props) => {
       />
       <div className="container card-body">
         <div className="row">
-          <div className="col">
+          <div className="col col-8">
             <h5 className="cardTitle" id="hotelName">
               {listingInfo.hotelName}
             </h5>
@@ -31,8 +31,8 @@ const Listing = (listingInfo: Props) => {
               {listingInfo.cityName}, {listingInfo.stateName}
             </p>
           </div>
-          <div className="col" style={{ textAlign: "right" }}>
-            {listingInfo.rating}
+          <div className="col col-4" style={{ textAlign: "right" }}>
+            {listingInfo.rating} stars
           </div>
         </div>
       </div>

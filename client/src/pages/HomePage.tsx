@@ -8,29 +8,19 @@ const Home = () => {
       <div
         style={{
           backgroundImage: `url(${HomePageImage})`,
+          backgroundSize: "cover",
           backgroundPosition: "center",
           height: "91.2vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
-        <h1
-          style={{
-            margin: "auto",
-            padding: "0.8em",
-            width: "50%",
-            textAlign: "center",
-          }}
-        >
-          Your Perfect Stay, Anywhere, Anytime!
-        </h1>
-
         <form
           action="#/search"
-          className="container"
+          className="container bg-body-tertiary"
           style={{
-            backgroundColor: "white",
             width: "50%",
-            margin: "auto",
-            marginTop: "14em",
             padding: "1em",
             paddingLeft: "2em",
             paddingRight: "2em",
