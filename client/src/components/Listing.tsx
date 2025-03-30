@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
 
 interface Props {
-  imageSrc: string;
   hotelID: number;
   hotelName: string;
+  roomID: number;
+  imageSrc: string;
   cityName: string;
   stateName: string;
   rating: number;
@@ -36,19 +37,19 @@ const Listing = (listingInfo: Props) => {
           </div>
         </div>
       </div>
+
       <ul className="list-group list-group-flush">
         <li className="list-group-item" id="amenities">
           {listingInfo.amenities}
         </li>
         <li className="container list-group-item">
           <div className="row">
-            <div className="col" id="price">
+            <div className="col-8" id="price">
               <b>CA ${listingInfo.price}</b>
             </div>
-            <div className="col"></div>
             <button
-              className="col btn btn-primary"
-              onClick={() => navigate(`/booking/${listingInfo.hotelID}`)}
+              className="col-4 btn btn-primary"
+              onClick={() => navigate(`/booking/${listingInfo.roomID}`)}
             >
               Book
             </button>
