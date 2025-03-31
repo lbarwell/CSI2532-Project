@@ -13,7 +13,7 @@ const BookingPage = () => {
       <div className="container" style={{ width: "80%", margin: "auto" }}>
         <div className="row">
           <div className="col-4">
-            <HotelPanel propHotelID={Number(hotelID)} />
+            <HotelPanel roomID={Number(hotelID)} />
           </div>
           <div className="col">
             <BookingForm />

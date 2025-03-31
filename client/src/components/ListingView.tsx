@@ -4,32 +4,36 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 import Listing from "./Listing";
 import HiltonImage from "../assets/hilton-montreal.avif";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 interface Hotel {
-  chain_number: number;
+  amenities: string;
   city: string;
-  email: string;
   hotel_number: number;
-  manager_id: number;
   name: string;
-  phone: string;
+  price: number;
+  room_number: number;
   state: string;
-  street_name: string;
-  street_number: number;
-  zip_code: string;
   rating: number;
 }
 
 const ListingView = () => {
+  const [searchParams] = useSearchParams();
+
+  const destination = String(searchParams.get("destination"));
+  const travellers = Number(searchParams.get("travellers"));
+
   const [hotels, setHotels] = useState<Hotel[]>([]);
 
-  const getHotels = async (filters: { [key: string]: string }) => {
+  const getHotels = async (filters: {
+    [key: string]: string | number | boolean;
+  }) => {
     try {
       const params = new URLSearchParams(
         filters as Record<string, string>
       ).toString();
-      console.log(`http://localhost:5000/hotels?${params}`);
-      const response = await fetch(`http://localhost:5000/hotels?${params}`);
+
+      const response = await fetch(`http://localhost:5000/hotelinfo?${params}`);
       const jsonData = await response.json();
 
       setHotels(jsonData);
@@ -39,8 +43,15 @@ const ListingView = () => {
   };
 
   useEffect(() => {
-    getHotels({ sort: "rating" });
+    getHotels({
+      sort: "name",
+      reverse: false,
+      destination: destination,
+      travellers: travellers,
+    });
   }, []);
+
+  const [selectedSort, setSelectedSort] = useState("Name");
 
   return (
     <div style={{ margin: "1em" }}>
@@ -50,25 +61,29 @@ const ListingView = () => {
             {hotels.length} hotel{hotels.length === 1 ? "" : "s"}
           </p>
           <div className="col"></div>
+
           <div className="col dropdown">
             <p>Sort by</p>
             <button
               className="btn btn-primary dropdown-toggle"
               type="button"
               data-bs-toggle="dropdown"
-              aria-expanded="false"
-              style={{ width: "100%", textAlign: "right" }}
+              style={{ width: "100%", textAlign: "center" }}
             >
-              Star rating
+              {selectedSort}
             </button>
+
             <ul
               className="dropdown-menu"
-              style={{ width: "100%", textAlign: "right" }}
+              style={{ width: "100%", textAlign: "center" }}
             >
               <li>
                 <a
                   className="dropdown-item"
-                  onClick={() => getHotels({ sort: "name" })}
+                  onClick={() => {
+                    setSelectedSort("Name");
+                    getHotels({ sort: "name", reverse: false });
+                  }}
                 >
                   Name
                 </a>
@@ -76,33 +91,54 @@ const ListingView = () => {
               <li>
                 <a
                   className="dropdown-item"
-                  onClick={() => getHotels({ sort: "rating" })}
+                  onClick={() => {
+                    setSelectedSort("Star rating");
+                    getHotels({ sort: "rating", reverse: true });
+                  }}
                 >
                   Star rating
                 </a>
               </li>
               <li>
-                <a className="dropdown-item">Price: low to high</a>
+                <a
+                  className="dropdown-item"
+                  onClick={() => {
+                    setSelectedSort("Price: low to high");
+                    getHotels({ sort: "price", reverse: false });
+                  }}
+                >
+                  Price: low to high
+                </a>
               </li>
               <li>
-                <a className="dropdown-item">Price: high to low</a>
+                <a
+                  className="dropdown-item"
+                  onClick={() => {
+                    setSelectedSort("Price: high to low");
+                    getHotels({ sort: "price", reverse: true });
+                  }}
+                >
+                  Price: high to low
+                </a>
               </li>
             </ul>
           </div>
         </div>
       </div>
+
       <div className="row row-cols-1 row-cols-md-3 g-4">
         {hotels.map((hotel) => (
           <div className="col" key={hotel.hotel_number}>
             <Listing
-              imageSrc={HiltonImage}
               hotelID={hotel.hotel_number}
               hotelName={hotel.name}
+              roomID={hotel.room_number}
+              imageSrc={HiltonImage}
               cityName={hotel.city}
               stateName={hotel.state}
               rating={hotel.rating}
-              amenities="unknown amenities"
-              price={NaN}
+              amenities={hotel.amenities}
+              price={hotel.price}
             />
           </div>
         ))}

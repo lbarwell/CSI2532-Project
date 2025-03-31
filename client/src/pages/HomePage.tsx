@@ -1,7 +1,22 @@
 import Navbar from "../components/Navbar";
 import HomePageImage from "../assets/home-page-rome.png";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const Home = () => {
+  const [destination, setDestination] = useState("");
+  const [travellers, setTravellers] = useState(1);
+
+  const navigate = useNavigate();
+
+  const onSearch = (filters: { [key: string]: string | number }) => {
+    const params = new URLSearchParams(
+      filters as Record<string, string>
+    ).toString();
+
+    navigate(`/search?${params}`);
+  };
+
   return (
     <>
       <Navbar />
@@ -17,7 +32,6 @@ const Home = () => {
         }}
       >
         <form
-          action="#/search"
           className="container bg-body-tertiary"
           style={{
             width: "50%",
@@ -29,14 +43,15 @@ const Home = () => {
         >
           <div className="row">
             <div className="col mb-3">
-              <label htmlFor="startDateField" className="form-label">
+              <label htmlFor="destination" className="form-label">
                 Where to?
               </label>
               <input
                 type="text"
+                placeholder="New York"
                 className="form-control"
-                id="startDateField"
-                aria-describedby="emailHelp"
+                id="destination"
+                onChange={(e) => setDestination(e.target.value)}
               />
             </div>
 
@@ -44,22 +59,21 @@ const Home = () => {
               <label htmlFor="endDateField" className="form-label">
                 Dates
               </label>
-              <input
-                type="text"
-                className="form-control"
-                id="endDateField"
-                aria-describedby="emailHelp"
-              />
+              <input type="text" className="form-control" id="endDateField" />
             </div>
 
             <div className="col">
-              <label htmlFor="exampleInputPassword1" className="form-label">
+              <label htmlFor="travellersField" className="form-label">
                 Travellers
               </label>
               <input
-                type="text"
+                type="number"
                 className="form-control"
-                id="exampleInputPassword1"
+                defaultValue={1}
+                min={0}
+                max={15}
+                id="travellersField"
+                onChange={(e) => setTravellers(Number(e.target.value))}
               />
             </div>
 
@@ -71,6 +85,9 @@ const Home = () => {
                 marginLeft: "0.5em",
                 marginTop: "2em",
               }}
+              onClick={() =>
+                onSearch({ destination: destination, travellers: travellers })
+              }
             >
               Search
             </button>

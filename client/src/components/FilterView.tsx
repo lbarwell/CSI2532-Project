@@ -1,4 +1,25 @@
+import { useEffect, useState } from "react";
+
+interface Amenity {
+  text: string;
+  isChecked: boolean;
+}
+
 const FilterView = () => {
+  const [amenities, setAmenities] = useState<Amenity[]>([]);
+
+  const data = [{ text: "Pool", isChecked: false }];
+
+  useEffect(() => setAmenities(data), []);
+
+  const onSelectAll = () => {
+    for (const amenity of amenities) {
+      amenity.isChecked = true;
+    }
+
+    setAmenities(amenities);
+  };
+
   return (
     <div
       className="bg-body-tertiary"
@@ -83,55 +104,29 @@ const FilterView = () => {
             type="checkbox"
             value=""
             id="selectAllCheckbox"
+            onClick={onSelectAll}
           />
           <label className="form-check-label" htmlFor="selectAllCheckbox">
             Select all
           </label>
         </div>
-        <div className="form-check">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            value=""
-            id="poolCheckbox"
-          />
-          <label className="form-check-label" htmlFor="poolCheckbox">
-            Pool
-          </label>
-        </div>
-        <div className="form-check">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            value=""
-            id="spaCheckbox"
-          />
-          <label className="form-check-label" htmlFor="spaCheckbox">
-            Spa
-          </label>
-        </div>
-        <div className="form-check">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            value=""
-            id="kitchenCheckbox"
-          />
-          <label className="form-check-label" htmlFor="kitchenCheckbox">
-            Kitchen
-          </label>
-        </div>
-        <div className="form-check">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            value=""
-            id="petFriendlyCheckbox"
-          />
-          <label className="form-check-label" htmlFor="petFriendlyCheckbox">
-            Pet Friendly
-          </label>
-        </div>
+
+        {amenities.map((amenity) => (
+          <div className="form-check" key={amenities.indexOf(amenity)}>
+            <input
+              className="form-check-input"
+              type="checkbox"
+              value=""
+              id={"checkbox" + amenities.indexOf(amenity)}
+            />
+            <label
+              className="form-check-label"
+              htmlFor={"checkbox" + amenities.indexOf(amenity)}
+            >
+              {amenity.text}
+            </label>
+          </div>
+        ))}
       </div>
     </div>
   );
