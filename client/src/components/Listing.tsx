@@ -40,7 +40,7 @@ const Listing = (listingInfo: Props) => {
 
       <ul className="list-group list-group-flush">
         <li className="list-group-item" id="amenities">
-          {listingInfo.amenities}
+          {listingInfo.amenities.split(",").join(", ")}
         </li>
         <li className="container list-group-item">
           <div className="row">

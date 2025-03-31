@@ -4,6 +4,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 import Listing from "./Listing";
 import HiltonImage from "../assets/hilton-montreal.avif";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 interface Hotel {
   amenities: string;
@@ -17,9 +18,16 @@ interface Hotel {
 }
 
 const ListingView = () => {
+  const [searchParams] = useSearchParams();
+
+  const destination = String(searchParams.get("destination"));
+  const travellers = Number(searchParams.get("travellers"));
+
   const [hotels, setHotels] = useState<Hotel[]>([]);
 
-  const getHotels = async (filters: { [key: string]: string | boolean }) => {
+  const getHotels = async (filters: {
+    [key: string]: string | number | boolean;
+  }) => {
     try {
       const params = new URLSearchParams(
         filters as Record<string, string>
@@ -35,7 +43,12 @@ const ListingView = () => {
   };
 
   useEffect(() => {
-    getHotels({ sort: "name", reverse: false });
+    getHotels({
+      sort: "name",
+      reverse: false,
+      destination: destination,
+      travellers: travellers,
+    });
   }, []);
 
   const [selectedSort, setSelectedSort] = useState("Name");
