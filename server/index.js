@@ -61,7 +61,8 @@ app.post("/hotelchains", async(req, res) => {
 // Get all hotels
 app.get("/hotels", async(req, res) => {
     try {
-        const allHotels = await pool.query(`SELECT * FROM hotel`)
+        const { sort } = req.query;
+        const allHotels = await pool.query(`SELECT * FROM hotel ORDER BY ${sort} ${sort === "rating" ? "DESC" : ""}`)
 
         res.json(allHotels.rows);
     } catch (error) {
