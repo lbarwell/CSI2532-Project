@@ -61,8 +61,7 @@ app.post("/hotelchains", async(req, res) => {
 // Get all hotels
 app.get("/hotels", async(req, res) => {
     try {
-        const { sort } = req.query;
-        const allHotels = await pool.query(`SELECT * FROM hotel ORDER BY ${sort} ${sort === "rating" ? "DESC" : ""}`)
+        const allHotels = await pool.query(`SELECT * FROM hotel`)
 
         res.json(allHotels.rows);
     } catch (error) {
@@ -91,6 +90,89 @@ app.post("/hotels", async(req, res) => {
             (${id}, '${name}', ${chainID}, ${streetNumber}, '${streetName}', '${city}', '${state}', '${zipCode}', ' ${email}', '${phone}', ${managerID}) RETURNING *`);
 
         res.json(newHotel.rows);
+    } catch (error) {
+        console.error(error.message);
+    }
+});
+
+
+
+// # Hotel room # //
+
+// Get all hotel rooms
+app.get("/hotelrooms", async(req, res) => {
+    try {
+        const allHotelRooms = await pool.query(`SELECT * FROM hotel_room`)
+
+        res.json(allHotelRooms.rows);
+    } catch (error) {
+        console.error(error.message);
+    }
+});
+
+// Get a hotel room by id
+app.get("/hotelrooms/:id", async(req, res) => {
+    try {
+        const { id } = req.params;
+        const hotelRoom = await pool.query(`SELECT * FROM hotel_room WHERE hotel_room_id = ${id}`);
+
+        res.json(hotelRoom.rows);
+    } catch (error) {
+        console.error(error.message);
+    }
+});
+
+// Create a hotel room
+app.post("/hotelrooms", async(req, res) => {
+    try {
+        const { id, roomNumber, hotelNumber, price, capacity, amenities, view, extendable, knownIssues } = req.body;
+        const newHotelRoom = await pool.query(`INSERT INTO hotel_room 
+            (hotel_room_id, room_number, hotel_number, price, capacity, amenities, view, extendable, known_issues) VALUES 
+            (${id}, ${roomNumber}, ${hotelNumber}, ${price}, ${capacity}, '${amenities}', '${view}', ${extendable}, '${knownIssues}') RETURNING *`);
+
+        res.json(newHotelRoom.rows);
+    } catch (error) {
+        console.error(error.message);
+    }
+});
+
+
+
+// # Hotel search query # //
+// Get all hotels in given order and with search filters
+app.get("/hotelinfo", async(req, res) => {
+    try {
+        const { sort, reverse, destination, travellers } = req.query;
+        const orderDirection = reverse === "true" ? "DESC" : "ASC";
+
+        const allHotels = await pool.query(`
+                SELECT r.room_number, h.hotel_number, h.name, h.city, h.state, h.rating, r.amenities, r.price, r.capacity 
+                FROM hotel h JOIN hotel_room r ON h.hotel_number = r.hotel_number 
+                WHERE r.price = (
+                    SELECT MIN(r2.price)
+                    FROM hotel_room r2
+                    WHERE r2.hotel_number = h.hotel_number
+                ) ${destination !== "" ? `AND h.city = '${destination}'` : ""} AND r.capacity >= ${travellers}
+                ORDER BY ${sort} ${orderDirection}`)
+
+        res.json(allHotels.rows);
+    } catch (error) {
+        console.error(error.message);
+    }
+});
+
+// # Hotel booking information query # //
+// Get hotel information by id
+app.get("/hotelinfo/:id", async(req, res) => {
+    try {
+        const { id } = req.params;
+
+        const roomInfo = await pool.query(`
+                SELECT h.name, h.city, h.state, h.rating, r.amenities, r.price 
+                FROM hotel h JOIN hotel_room r ON h.hotel_number = r.hotel_number 
+                WHERE r.room_number = ${id}`)
+
+        res.json(roomInfo.rows);
     } catch (error) {
         console.error(error.message);
     }

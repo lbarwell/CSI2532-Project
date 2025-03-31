@@ -1,47 +1,67 @@
+import { useEffect, useState } from "react";
 import HiltonImage from "../assets/hilton-montreal.avif";
 
 interface Props {
-  propHotelID: number;
+  roomID: number;
 }
 
-const HotelPanel = ({ propHotelID }: Props) => {
-  const listingInfo = {
-    // Placeholder data, fetch the actual listing from the database
-    id: propHotelID,
+interface Room {
+  amenities: string;
+  city: string;
+  imageSrc: any;
+  name: string;
+  price: number;
+  rating: number;
+  state: string;
+}
+
+const HotelPanel = ({ roomID }: Props) => {
+  const [room, setRoom] = useState<Room>({
+    amenities: "",
+    city: "",
     imageSrc: HiltonImage,
-    hotelName: "Hilton",
-    cityName: "Montreal",
-    stateName: "QC",
-    rating: "4 stars",
-    amenities:
-      "Pool, Spa, Pet Friendly, Gym, Free Wifi, Kitchen, Bar, Restaurant, Breakfast",
-    price: 135,
+    name: "",
+    price: 0,
+    rating: 0,
+    state: "",
+  });
+
+  const getRoomInfo = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/hotelinfo/${roomID}`);
+      const jsonData = await response.json();
+
+      setRoom(jsonData[0]);
+    } catch (error: any) {
+      console.error(error.message);
+    }
   };
 
-  const amenitiesArray = listingInfo.amenities.split(", ");
+  useEffect(() => {
+    getRoomInfo();
+  }, []);
+
+  room.imageSrc = HiltonImage;
+  const amenitiesArray = room.amenities.split(",");
 
   return (
     <div
       className="card bg-body-tertiary"
       style={{ marginTop: "1em", border: "none" }}
     >
-      <img
-        src={listingInfo.imageSrc}
-        className="card-img-top"
-        alt="Listing image"
-      />
+      <img src={HiltonImage} className="card-img-top" alt="Listing image" />
       <div className="container card-body">
         <div className="row">
-          <div className="col">
+          <div className="col-9">
             <h2 className="cardTitle" id="hotelName">
-              {listingInfo.hotelName}
+              {room.name}
             </h2>
             <h5 className="card-text">
-              {listingInfo.cityName}, {listingInfo.stateName}
+              {room.city}, {room.state}
             </h5>
           </div>
-          <div className="col" style={{ textAlign: "right" }}>
-            {listingInfo.rating}
+          <div className="col-3" style={{ textAlign: "right" }}>
+            {room.rating} stars
           </div>
         </div>
         <div className="row">
@@ -81,7 +101,7 @@ const HotelPanel = ({ propHotelID }: Props) => {
         </div>
 
         <div className="row" style={{ textAlign: "center", marginTop: "2em" }}>
-          <h5>CAD ${listingInfo.price} per night (one bed)</h5>
+          <h5>CAD ${room.price} per night (one bed)</h5>
         </div>
       </div>
     </div>
