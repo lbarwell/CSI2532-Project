@@ -96,7 +96,30 @@ app.post("/hotels", async(req, res) => {
     }
 });
 
+// # Hotel Room # //
 
+// Get hotel rooms with an optional amenities filter
+app.get("/hotelrooms", async (req, res) => {
+    try {
+      // Accept 'amenity' as a query parameter (e.g., ?amenity=Pool)
+      const { amenity } = req.query;
+      let query = "SELECT * FROM hotel_room";
+      let params = [];
+  
+      // If an amenity is provided, add a WHERE clause using ILIKE for case-insensitive matching
+      if (amenity) {
+        query += " WHERE amenities ILIKE $1";
+        params.push(`%${amenity}%`);
+      }
+      
+      // Execute the query with parameters
+      const results = await pool.query(query, params);
+      res.json(results.rows);
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).json({ error: "Server error" });
+    }
+  });
 
 // # Employee # //
 
