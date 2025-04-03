@@ -7,6 +7,8 @@ interface Amenity {
 
 const FilterView = () => {
   const [amenities, setAmenities] = useState<Amenity[]>([]);
+  const [capacity, setCapacity] = useState(11);
+  const [rating, setRating] = useState(3);
 
   const data = [{ text: "Pool", isChecked: false }];
 
@@ -40,19 +42,31 @@ const FilterView = () => {
         Apply filters
       </button>
 
-      <div className="container" style={{ padding: "0em", marginTop: "3em" }}>
+      <div className="container" style={{ padding: "0em", marginTop: "1em" }}>
         <p>
           <b>Price per night</b>
         </p>
         <div className="row">
           <div className="col form-floating mb-3">
-            <input type="text" className="form-control" id="minInput" />
+            <input
+              type="number"
+              className="form-control"
+              id="minInput"
+              min={0}
+              defaultValue={0}
+            />
             <label htmlFor="minInput" style={{ marginLeft: "0.5em" }}>
               Min
             </label>
           </div>
           <div className="col form-floating mb-3">
-            <input type="text" className="form-control" id="maxInput" />
+            <input
+              type="number"
+              className="form-control"
+              id="maxInput"
+              min={0}
+              defaultValue={600}
+            />
             <label htmlFor="maxInput" style={{ marginLeft: "0.5em" }}>
               Max
             </label>
@@ -64,9 +78,9 @@ const FilterView = () => {
         <label
           htmlFor="ratingRange"
           className="form-label"
-          style={{ marginTop: "3em" }}
+          style={{ marginTop: "1em" }}
         >
-          <b>Rating</b>
+          <b>Minimum rating ({rating} stars)</b>
         </label>
         <input
           type="range"
@@ -74,6 +88,7 @@ const FilterView = () => {
           min="1"
           max="5"
           id="ratingRange"
+          onChange={(e) => setRating(Number(e.target.value))}
         />
       </div>
 
@@ -81,21 +96,22 @@ const FilterView = () => {
         <label
           htmlFor="capacityRange"
           className="form-label"
-          style={{ marginTop: "3em" }}
+          style={{ marginTop: "1em" }}
         >
-          <b>Capacity</b>
+          <b>Minimum capacity ({capacity} people)</b>
         </label>
         <input
           type="range"
           className="form-range"
           min="1"
-          max="30"
+          max="20"
           id="capacityRange"
+          onChange={(e) => setCapacity(Number(e.target.value))}
         />
       </div>
 
       <div>
-        <label className="form-label" style={{ marginTop: "3em" }}>
+        <label className="form-label" style={{ marginTop: "1em" }}>
           <b>Amenities</b>
         </label>
         <div className="form-check">
