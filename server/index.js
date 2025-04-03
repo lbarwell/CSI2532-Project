@@ -152,7 +152,7 @@ app.get("/hotelinfo", async(req, res) => {
                     SELECT MIN(r2.price)
                     FROM hotel_room r2
                     WHERE r2.hotel_number = h.hotel_number
-                ) ${destination !== "" ? `AND h.city = '${destination}'` : ""} AND r.capacity >= ${travellers}
+                ) ${destination !== "" ? `AND h.city LIKE '%${destination}%'` : ""} AND r.capacity >= ${travellers}
                 ORDER BY ${sort} ${orderDirection}`)
 
         res.json(allHotels.rows);

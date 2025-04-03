@@ -6,6 +6,12 @@ import { useState } from "react";
 const Home = () => {
   const [destination, setDestination] = useState("");
   const [travellers, setTravellers] = useState(1);
+  const [startDate, setStartDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
+  const [endDate, setEndDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
 
   const navigate = useNavigate();
 
@@ -57,9 +63,30 @@ const Home = () => {
 
             <div className="col">
               <label htmlFor="endDateField" className="form-label">
-                Dates
+                Start date
               </label>
-              <input type="text" className="form-control" id="endDateField" />
+              <input
+                type="date"
+                className="form-control"
+                id="endDateField"
+                defaultValue={startDate}
+                min={new Date().toISOString().split("T")[0]}
+                max={endDate}
+                onChange={(e) => setStartDate(e.target.value)}
+              />
+            </div>
+
+            <div className="col">
+              <label htmlFor="endDateField" className="form-label">
+                End date
+              </label>
+              <input
+                type="date"
+                className="form-control"
+                id="endDateField"
+                min={startDate}
+                onChange={(e) => setEndDate(e.target.value)}
+              />
             </div>
 
             <div className="col">
