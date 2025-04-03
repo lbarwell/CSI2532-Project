@@ -1,7 +1,5 @@
-import { useContext } from "react";
 import Navbar from "../components/Navbar";
 import TableView from "../components/tableView";
-import { LoginContext } from "../context";
 
 interface Props {
   isLoggedIn: boolean;

@@ -37,7 +37,7 @@ Note: running only the client means the webpage will not display any information
 
 The first step in setting up the server is to create the database. Run the SQL query located at database/queries/eHotels.sql in your postgreSQL interface to initialize it.
 
-Note: currently, installing the database does not populate the tables with default values, the database tables are empty.
+Note: installing the database currently does not populate the tables with default values, the database tables are empty.
 
 Next, open server/db.js and fill in the required fields:
 
@@ -60,7 +60,7 @@ To run the server, open the project in a new terminal window and run the followi
 ```bash
 cd server # Navigate to the server directory
 npm install express pg cors # Install the required node modules
-npx run index.js # Run the client application
+npx run index.js # Run the server
 ```
 
 If the installation was successful, the server will reply with 'Server has started on port 5000'
