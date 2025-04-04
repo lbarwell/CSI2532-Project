@@ -54,6 +54,20 @@ app.post("/hotelchains", async(req, res) => {
     }
 });
 
+// Delete a hotel chain by chain_number
+app.delete("/hotelchains/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        await pool.query(
+            "DELETE FROM hotel_chain WHERE chain_number = $1",
+            [id]
+        );
+        res.json({ message: "Hotel chain deleted successfully" });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Server Error");
+    }
+});
 
 
 // # Hotel # //
@@ -95,6 +109,20 @@ app.post("/hotels", async(req, res) => {
     }
 });
 
+// Delete a hotel by hotel_number
+app.delete("/hotels/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        await pool.query(
+            "DELETE FROM hotel WHERE hotel_number = $1",
+            [id]
+        );
+        res.json({ message: "Hotel deleted successfully" });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Server Error");
+    }
+});
 
 
 // # Hotel room # //
@@ -136,6 +164,20 @@ app.post("/hotelrooms", async(req, res) => {
     }
 });
 
+// Delete a hotel room by hotel_room_id
+app.delete("/hotelrooms/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        await pool.query(
+            "DELETE FROM hotel_room WHERE hotel_room_id = $1",
+            [id]
+        );
+        res.json({ message: "Hotel room deleted successfully" });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Server Error");
+    }
+});
 
 
 // # Hotel search query # //
@@ -223,6 +265,21 @@ app.post("/employees", async(req, res) => {
         res.json(newEmployee.rows);
     } catch (error) {
         console.error(error.message);
+    }
+});
+
+// Delete an employee by employee_id
+app.delete("/employees/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        await pool.query(
+            "DELETE FROM employee WHERE employee_id = $1",
+            [id]
+        );
+        res.json({ message: "Employee deleted successfully" });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Server Error");
     }
 });
 
