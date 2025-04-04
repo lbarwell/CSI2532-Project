@@ -318,7 +318,7 @@ app.post("/users", async (req, res) => {
         const newUser = await pool.query(
             `INSERT INTO "user" 
             (social_insurance_number, first_name, last_name, street_number, street_name, apt_number, city, state, zip_code, email, phone_number, creation_date)
-            VALUES (${social_insurance_number}, ${first_name}, ${last_name}, ${street_number},${street_name}, ${apt_number}, ${city}, ${state}, ${zip_code}, ${email}, ${phone_number}, ${creation_date}, $12)
+            VALUES (${social_insurance_number}, ${first_name}, ${last_name}, ${street_number},${street_name}, ${apt_number}, ${city}, ${state}, ${zip_code}, ${email}, ${phone_number}, ${creation_date})
             RETURNING *;`
         );
         res.json(newUser.rows[0]);
