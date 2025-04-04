@@ -98,18 +98,36 @@ app.post("/hotels", async(req, res) => {
 
 // # Hotel Room # //
 
-// Get hotel rooms with an optional amenities filter
+// Get hotel rooms with an optional amenities and price range filter
 app.get("/hotelrooms", async (req, res) => {
     try {
-      // Accept 'amenity' as a query parameter (e.g., ?amenity=Pool)
-      const { amenity } = req.query;
+      // Accept 'amenity', 'minPrice', and 'maxPrice' as query parameters
+      const { amenity, minPrice, maxPrice } = req.query;
       let query = "SELECT * FROM hotel_room";
+      let conditions = [];
       let params = [];
   
-      // If an amenity is provided, add a WHERE clause using ILIKE for case-insensitive matching
+      // Filter by amenity if provided (using ILIKE for case-insensitive matching)
       if (amenity) {
-        query += " WHERE amenities ILIKE $1";
+        conditions.push(`amenities ILIKE $${params.length + 1}`);
         params.push(`%${amenity}%`);
+      }
+  
+      // Filter by minimum price if provided
+      if (minPrice) {
+        conditions.push(`price >= $${params.length + 1}`);
+        params.push(minPrice);
+      }
+  
+      // Filter by maximum price if provided
+      if (maxPrice) {
+        conditions.push(`price <= $${params.length + 1}`);
+        params.push(maxPrice);
+      }
+  
+      // Append conditions if any were added
+      if (conditions.length > 0) {
+        query += " WHERE " + conditions.join(" AND ");
       }
       
       // Execute the query with parameters
@@ -120,6 +138,7 @@ app.get("/hotelrooms", async (req, res) => {
       res.status(500).json({ error: "Server error" });
     }
   });
+  
 
 // # Employee # //
 
