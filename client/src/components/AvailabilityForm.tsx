@@ -8,8 +8,28 @@ const BookingForm = () => {
       new Date().toISOString().split("T")[0]
     );
 
+    const [availability, setAvailability] = useState<boolean | null>(null);
+
+    const getAvailability = async (filters: {
+      [key: string]: string | number | boolean;
+    }) => {
+      try {
+        const params = new URLSearchParams(
+          filters as Record<string, string>
+        ).toString();
+  
+        const response = await fetch(`http://localhost:5000/reservations?${params}`);
+        const jsonData = await response.json();
+  
+        setAvailability(jsonData.length === 0);
+      } catch (error: any) {
+        console.error(error.message);
+      }
+    };
+
   return (
     <div
+    className="container"
       style={{
         marginTop: "1em",
         paddingBottom: "2em",
@@ -18,8 +38,9 @@ const BookingForm = () => {
       }}
     >
       <h2>Check availability</h2>
-      <form className="row g-3 needs-validation" noValidate>
-        <div className="col-md-6">
+      
+      <form className="row needs-validation" noValidate>
+        <div className="col-6">
           <label htmlFor="validationCustom01" className="form-label">
             Start date
           </label>
@@ -35,7 +56,7 @@ const BookingForm = () => {
           />
         </div>
 
-        <div className="col-md-6">
+        <div className="col-6">
           <label htmlFor="validationCustom02" className="form-label">
             End date
           </label>
@@ -50,11 +71,16 @@ const BookingForm = () => {
           />
         </div>
 
-        <div className="col-3" style={{width: "100%", alignItems: "right"}}>
+        <div className={"col-6"} style={{ marginTop: "2.5em"}}>
+          <p className={`${availability === null ? "d-none" : ""}`} style={{ color: availability ? "green" : "darkred" }}>{availability ? "A" : "Not a"}vailable</p>
+        </div>
+
+        <div className="col-6">
           <button
             className="btn btn-primary"
-            style={{ width: "25%", marginTop: "2em" }}
+            style={{ width: "100%", marginTop: "2em" }}
             type="submit"
+            onClick={() => getAvailability({ start: startDate, end: endDate })}
           >
             Check
           </button>

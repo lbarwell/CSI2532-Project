@@ -27,6 +27,9 @@ const ListingView = () => {
   const startDate = searchParams.get("start");
   const endDate = searchParams.get("end");
   const capacity = searchParams.get("capacity");
+  const minPrice = searchParams.get("minPrice");
+  const maxPrice = searchParams.get("maxPrice");
+  const rating = searchParams.get("rating");
   const chain = searchParams.get("chain");
 
   const filters = {
@@ -36,6 +39,9 @@ const ListingView = () => {
     start: startDate === null ? "" : startDate,
     end: endDate === null ? "" : endDate,
     capacity: capacity === null ? "" : capacity,
+    minPrice: minPrice === null ? "" : minPrice,
+    maxPrice: maxPrice === null ? "" : maxPrice,
+    rating: rating === null ? "" : rating,
     chain: chain === null ? "" : chain
   }
 

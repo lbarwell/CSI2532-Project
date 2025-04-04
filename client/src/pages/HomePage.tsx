@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 const Home = () => {
+  const navigate = useNavigate();
+
   const [destination, setDestination] = useState("");
   const [startDate, setStartDate] = useState(
     new Date().toISOString().split("T")[0]
@@ -12,8 +14,6 @@ const Home = () => {
     new Date().toISOString().split("T")[0]
   );
   const [travellers, setTravellers] = useState(1);
-
-  const navigate = useNavigate();
 
   const onSearch = (filters: { [key: string]: string | number | boolean }) => {
     const params = new URLSearchParams(
@@ -114,7 +114,14 @@ const Home = () => {
                 marginTop: "2em",
               }}
               onClick={() =>
-                onSearch({ sort: "name", reverse: false, destination: destination, start: startDate, end: endDate, capacity: travellers })
+                onSearch({
+                  sort: "name",
+                  reverse: false,
+                  destination: destination,
+                  start: startDate,
+                  end: endDate,
+                  capacity: travellers,
+                })
               }
             >
               Search

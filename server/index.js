@@ -4,7 +4,7 @@ const cors = require("cors");
 const pool = require("./db");
 
 // Port to listen on
-const port = 3000;
+const port = 5000;
 
 // App setup
 const app = express();
@@ -145,6 +145,19 @@ app.get("/hotelinfo", async(req, res) => {
         const { sort, reverse, destination, capacity, rating } = req.query;
         const orderDirection = reverse === "true" ? "DESC" : "ASC";
 
+        console.log(`
+                SELECT r.room_number, h.hotel_number, h.name, h.city, h.state, h.rating, r.amenities, r.price, r.capacity 
+                FROM hotel h JOIN hotel_room r ON h.hotel_number = r.hotel_number 
+                WHERE r.price = (
+                    SELECT MIN(r2.price)
+                    FROM hotel_room r2
+                    WHERE r2.hotel_number = h.hotel_number
+                ) 
+                ${destination !== "" ? `AND h.city LIKE '%${destination}%'` : ""}
+                ${capacity !== "" ? `AND r.capacity >= ${capacity}`: "" } 
+                ${rating !== "" ? `AND r.capacity >= ${rating}`: "" } 
+                ORDER BY ${sort} ${orderDirection}`)
+
         const allHotels = await pool.query(`
                 SELECT r.room_number, h.hotel_number, h.name, h.city, h.state, h.rating, r.amenities, r.price, r.capacity 
                 FROM hotel h JOIN hotel_room r ON h.hotel_number = r.hotel_number 
@@ -154,7 +167,7 @@ app.get("/hotelinfo", async(req, res) => {
                     WHERE r2.hotel_number = h.hotel_number
                 ) 
                 ${destination !== "" ? `AND h.city LIKE '%${destination}%'` : ""}
-                ${travellers !== "" ? `AND r.capacity >= ${capacity}`: "" } 
+                ${capacity !== "" ? `AND r.capacity >= ${capacity}`: "" } 
                 ${rating !== "" ? `r.capacity >= ${capacity}`: "" } 
                 ORDER BY ${sort} ${orderDirection}`)
 
