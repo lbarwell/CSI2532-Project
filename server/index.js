@@ -145,16 +145,6 @@ app.get("/hotelinfo", async(req, res) => {
         const { sort, reverse, destination, capacity } = req.query;
         const orderDirection = reverse === "true" ? "DESC" : "ASC";
 
-        console.log(`
-                SELECT r.room_number, h.hotel_number, h.name, h.city, h.state, h.rating, r.amenities, r.price, r.capacity 
-                FROM hotel h JOIN hotel_room r ON h.hotel_number = r.hotel_number 
-                WHERE r.price = (
-                    SELECT MIN(r2.price)
-                    FROM hotel_room r2
-                    WHERE r2.hotel_number = h.hotel_number
-                ) ${destination !== "" ? `AND h.city LIKE '%${destination}%'` : ""} AND r.capacity >= ${capacity}
-                ORDER BY ${sort} ${orderDirection}`)
-
         const allHotels = await pool.query(`
                 SELECT r.room_number, h.hotel_number, h.name, h.city, h.state, h.rating, r.amenities, r.price, r.capacity 
                 FROM hotel h JOIN hotel_room r ON h.hotel_number = r.hotel_number 
@@ -162,7 +152,9 @@ app.get("/hotelinfo", async(req, res) => {
                     SELECT MIN(r2.price)
                     FROM hotel_room r2
                     WHERE r2.hotel_number = h.hotel_number
-                ) ${destination !== "" ? `AND h.city LIKE '%${destination}%'` : ""} AND r.capacity >= ${capacity}
+
+                ) ${destination !== "" ? `AND h.city LIKE '%${destination}%'` : ""} 
+                 ${capacity != "" ? `AND r.capacity >= ${capacity}` : ""}
                 ORDER BY ${sort} ${orderDirection}`)
 
         res.json(allHotels.rows);
