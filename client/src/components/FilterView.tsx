@@ -1,24 +1,46 @@
-import { useEffect, useState } from "react";
-
-interface Amenity {
-  text: string;
-  isChecked: boolean;
-}
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const FilterView = () => {
-  const [amenities, setAmenities] = useState<Amenity[]>([]);
+  const navigate = useNavigate();
 
-  const data = [{ text: "Pool", isChecked: false }];
+  const onSearch = (filters: { [key: string]: any }) => {
+    const params = new URLSearchParams(
+      filters as Record<string, string>
+    ).toString();
 
-  useEffect(() => setAmenities(data), []);
-
-  const onSelectAll = () => {
-    for (const amenity of amenities) {
-      amenity.isChecked = true;
-    }
-
-    setAmenities(amenities);
+    navigate(`/search?${params}`);
   };
+
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(600);
+  const [rating, setRating] = useState(3);
+  const [capacity, setCapacity] = useState(11);
+  const [amenities, setAmenities] = useState<string[]>([]);
+
+  const filters = {
+    minPrice: minPrice,
+    maxPrice: maxPrice,
+    minRating: rating,
+    minCapacity: capacity,
+    amenities: amenities
+  };
+
+  const amenitiesValues = ["Pool", "TV", "Spa", "Kitchen", "Gym"];
+
+  const addAmenity = (value: string) => {
+    if (amenities.includes(value)) {
+      const index = amenities.indexOf(value)
+
+      console.log(amenities, amenities.splice(index, 1))
+
+      setAmenities(amenities.splice(index, 1))
+    } else {
+      console.log(amenities, [value].concat(amenities))
+
+      setAmenities([value].concat(amenities))
+    }
+  }
 
   return (
     <div
@@ -36,23 +58,38 @@ const FilterView = () => {
         type="submit"
         className="col btn btn-primary"
         style={{ marginTop: "3em", width: "100%" }}
+        onClick={() => onSearch(filters)}
       >
         Apply filters
       </button>
 
-      <div className="container" style={{ padding: "0em", marginTop: "3em" }}>
+      <div className="container" style={{ padding: "0em", marginTop: "1em" }}>
         <p>
           <b>Price per night</b>
         </p>
         <div className="row">
           <div className="col form-floating mb-3">
-            <input type="text" className="form-control" id="minInput" />
+            <input
+              type="number"
+              className="form-control"
+              id="minInput"
+              min={0}
+              defaultValue={minPrice}
+              onChange={(e) => setMinPrice(Number(e.target.value))}
+            />
             <label htmlFor="minInput" style={{ marginLeft: "0.5em" }}>
               Min
             </label>
           </div>
           <div className="col form-floating mb-3">
-            <input type="text" className="form-control" id="maxInput" />
+            <input
+              type="number"
+              className="form-control"
+              id="maxInput"
+              min={0}
+              defaultValue={maxPrice}
+              onChange={(e) => setMaxPrice(Number(e.target.value))}
+            />
             <label htmlFor="maxInput" style={{ marginLeft: "0.5em" }}>
               Max
             </label>
@@ -64,9 +101,9 @@ const FilterView = () => {
         <label
           htmlFor="ratingRange"
           className="form-label"
-          style={{ marginTop: "3em" }}
+          style={{ marginTop: "1em" }}
         >
-          <b>Rating</b>
+          <b>Minimum rating ({rating} stars)</b>
         </label>
         <input
           type="range"
@@ -74,6 +111,7 @@ const FilterView = () => {
           min="1"
           max="5"
           id="ratingRange"
+          onChange={(e) => setRating(Number(e.target.value))}
         />
       </div>
 
@@ -81,49 +119,38 @@ const FilterView = () => {
         <label
           htmlFor="capacityRange"
           className="form-label"
-          style={{ marginTop: "3em" }}
+          style={{ marginTop: "1em" }}
         >
-          <b>Capacity</b>
+          <b>Minimum capacity ({capacity})</b>
         </label>
         <input
           type="range"
           className="form-range"
           min="1"
-          max="30"
+          max="20"
           id="capacityRange"
+          onChange={(e) => setCapacity(Number(e.target.value))}
         />
       </div>
 
       <div>
-        <label className="form-label" style={{ marginTop: "3em" }}>
+        <label className="form-label" style={{ marginTop: "1em" }}>
           <b>Amenities</b>
         </label>
-        <div className="form-check">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            value=""
-            id="selectAllCheckbox"
-            onClick={onSelectAll}
-          />
-          <label className="form-check-label" htmlFor="selectAllCheckbox">
-            Select all
-          </label>
-        </div>
 
-        {amenities.map((amenity) => (
-          <div className="form-check" key={amenities.indexOf(amenity)}>
+        {amenitiesValues.map((amenity) => (
+          <div className="form-check" key={amenitiesValues.indexOf(amenity)}>
             <input
               className="form-check-input"
               type="checkbox"
-              value=""
-              id={"checkbox" + amenities.indexOf(amenity)}
+              id={"checkbox" + amenitiesValues.indexOf(amenity)}
+              onClick={() => addAmenity(amenity)}
             />
             <label
               className="form-check-label"
               htmlFor={"checkbox" + amenities.indexOf(amenity)}
             >
-              {amenity.text}
+              {amenity}
             </label>
           </div>
         ))}

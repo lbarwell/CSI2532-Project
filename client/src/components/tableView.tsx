@@ -1,12 +1,7 @@
 interface Props {
   tableName: string;
   headers: string[];
-  data: {
-    roomID: number;
-    userID: number;
-    firstName: string;
-    lastName: string;
-  }[];
+  data: any[][];
 }
 
 const tableView = ({ tableName, headers, data }: Props) => {
@@ -23,12 +18,11 @@ const tableView = ({ tableName, headers, data }: Props) => {
           </tr>
         </thead>
         <tbody>
-          {data.map((item) => (
+          {data.map((row) => (
             <tr>
-              <td>{item.roomID}</td>
-              <td>{item.userID}</td>
-              <td>{item.firstName}</td>
-              <td>{item.lastName}</td>
+              {row.map((cell) => (
+                <td>{cell}</td>
+              ))}
             </tr>
           ))}
         </tbody>
