@@ -278,6 +278,71 @@ app.delete("/employees/:id", async (req, res) => {
     }
 });
 
+// # Users # //
+
+// Get a user by ID
+app.get("/users/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const userResult = await pool.query(
+            `SELECT * FROM "user" WHERE social_insurance_number = ${id}`
+        );
+        if (userResult.rows.length === 0) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.json(userResult.rows[0]);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Server Error");
+    }
+});
+
+// Create a user
+app.post("/users", async (req, res) => {
+    try {
+        const {
+            social_insurance_number,
+            first_name,
+            last_name,
+            street_number,
+            street_name,
+            apt_number,
+            city,
+            state,
+            zip_code,
+            email,
+            phone_number,
+            creation_date
+        } = req.body;
+        
+        const newUser = await pool.query(
+            `INSERT INTO "user" 
+            (social_insurance_number, first_name, last_name, street_number, street_name, apt_number, city, state, zip_code, email, phone_number, creation_date)
+            VALUES (${social_insurance_number}, ${first_name}, ${last_name}, ${street_number},${street_name}, ${apt_number}, ${city}, ${state}, ${zip_code}, ${email}, ${phone_number}, ${creation_date}, $12)
+            RETURNING *;`
+        );
+        res.json(newUser.rows[0]);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Server Error");
+    }
+});
+
+// Delete a user by user_id (social_insurance_number)
+app.delete("/users/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        await pool.query(
+            `DELETE FROM "user" WHERE social_insurance_number = ${id}`
+        );
+        res.json({ message: "User deleted successfully" });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Server Error");
+    }
+});
+
+
 // # Reservations # //
 
 // Get an reservations by Hotel ID
