@@ -20,8 +20,13 @@ interface Hotel {
 const ListingView = () => {
   const [searchParams] = useSearchParams();
 
-  const destination = String(searchParams.get("destination"));
-  const travellers = Number(searchParams.get("travellers"));
+  const sort = searchParams.get("sort");
+  const reverse = searchParams.get("reverse");
+  const destination = searchParams.get("destination");
+  const startDate = searchParams.get("start");
+  const endDate = searchParams.get("end");
+  const capacity = searchParams.get("capacity");
+  const chain = searchParams.get("chain");
 
   const [hotels, setHotels] = useState<Hotel[]>([]);
 
@@ -44,10 +49,13 @@ const ListingView = () => {
 
   useEffect(() => {
     getHotels({
-      sort: "name",
-      reverse: false,
-      destination: destination,
-      travellers: travellers,
+      sort: sort === null ? "" : sort,
+      reverse: reverse === null ? "" : reverse,
+      destination: destination === null ? "" : destination,
+      start: startDate === null ? "" : startDate,
+      end: endDate === null ? "" : endDate,
+      capacity: capacity === null ? "" : capacity,
+      chain: chain === null ? "" : chain
     });
   }, []);
 

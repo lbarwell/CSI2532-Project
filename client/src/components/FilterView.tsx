@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const FilterView = () => {
   const navigate = useNavigate();
 
-  const onSearch = (filters: { [key: string]: any }) => {
+  const onApplyFilters = (filters: { [key: string]: any }) => {
     const params = new URLSearchParams(
       filters as Record<string, string>
     ).toString();
@@ -15,18 +15,31 @@ const FilterView = () => {
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(600);
   const [rating, setRating] = useState(3);
-  const [capacity, setCapacity] = useState(11);
-  const [chain, setChain] = useState("Select");
+  const [chain, setChain] = useState("Select one");
+
+  const [searchParams] = useSearchParams();
+
+    const sort = searchParams.get("sort");
+    const reverse = searchParams.get("reverse");
+    const destination = searchParams.get("destination");
+    const startDate = searchParams.get("start");
+    const endDate = searchParams.get("end");
+    const capacity = searchParams.get("capacity");
 
   const filters = {
+    sort: sort,
+    reverse: reverse,
+    destination: destination,
+    start: startDate,
+    end: endDate,
+    capacity: capacity,
     minPrice: minPrice,
     maxPrice: maxPrice,
     minRating: rating,
-    minCapacity: capacity,
-    chain: chain === "Select" ? "" : chain,
+    chain: chain === "Select one" ? "" : chain,
   };
 
-  const chains = ["Luxury Stays", "Budget Inn"];
+  const chains = ["Select one", "Luxury Stays", "Budget Inn"];
 
   return (
     <div
@@ -43,8 +56,8 @@ const FilterView = () => {
       <button
         type="submit"
         className="col btn btn-primary"
-        style={{ marginTop: "3em", width: "100%" }}
-        onClick={() => onSearch(filters)}
+        style={{ marginTop: "1em", width: "100%" }}
+        onClick={() => onApplyFilters(filters)}
       >
         Apply filters
       </button>
@@ -98,24 +111,6 @@ const FilterView = () => {
           max="5"
           id="ratingRange"
           onChange={(e) => setRating(Number(e.target.value))}
-        />
-      </div>
-
-      <div>
-        <label
-          htmlFor="capacityRange"
-          className="form-label"
-          style={{ marginTop: "1em" }}
-        >
-          <b>Minimum capacity ({capacity})</b>
-        </label>
-        <input
-          type="range"
-          className="form-range"
-          min="1"
-          max="20"
-          id="capacityRange"
-          onChange={(e) => setCapacity(Number(e.target.value))}
         />
       </div>
 

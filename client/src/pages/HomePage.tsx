@@ -5,17 +5,17 @@ import { useState } from "react";
 
 const Home = () => {
   const [destination, setDestination] = useState("");
-  const [travellers, setTravellers] = useState(1);
   const [startDate, setStartDate] = useState(
     new Date().toISOString().split("T")[0]
   );
   const [endDate, setEndDate] = useState(
     new Date().toISOString().split("T")[0]
   );
+  const [travellers, setTravellers] = useState(1);
 
   const navigate = useNavigate();
 
-  const onSearch = (filters: { [key: string]: string | number }) => {
+  const onSearch = (filters: { [key: string]: string | number | boolean }) => {
     const params = new URLSearchParams(
       filters as Record<string, string>
     ).toString();
@@ -113,7 +113,7 @@ const Home = () => {
                 marginTop: "2em",
               }}
               onClick={() =>
-                onSearch({ destination: destination, travellers: travellers })
+                onSearch({ sort: "name", reverse: false, destination: destination, start: startDate, end: endDate, capacity: travellers })
               }
             >
               Search

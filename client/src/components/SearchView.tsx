@@ -54,7 +54,7 @@ const SearchView = () => {
 
           <div className="col mb-3">
             <label htmlFor="travellers" className="form-label">
-              Travellers
+              Capacity
             </label>
             <input
               type="number"
