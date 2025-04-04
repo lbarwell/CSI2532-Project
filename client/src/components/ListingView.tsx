@@ -77,7 +77,7 @@ const ListingView = () => {
               data-bs-toggle="dropdown"
               style={{ width: "100%", textAlign: "center" }}
             >
-              {filters.sort}
+              {selectedSort}
             </button>
 
             <ul
@@ -100,7 +100,7 @@ const ListingView = () => {
                 <a
                   className="dropdown-item"
                   onClick={() => {
-                    setSelectedSort("Rating");
+                    setSelectedSort("Star rating");
                     filters.sort = "rating"; filters.reverse = true;
                     getHotels(filters);
                   }}
