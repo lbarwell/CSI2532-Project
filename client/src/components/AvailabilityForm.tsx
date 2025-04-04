@@ -1,4 +1,13 @@
+import { useState } from "react";
+
 const BookingForm = () => {
+  const [startDate, setStartDate] = useState(
+      new Date().toISOString().split("T")[0]
+    );
+    const [endDate, setEndDate] = useState(
+      new Date().toISOString().split("T")[0]
+    );
+
   return (
     <div
       style={{
@@ -10,49 +19,41 @@ const BookingForm = () => {
     >
       <h2>Check availability</h2>
       <form className="row g-3 needs-validation" noValidate>
-        <div className="col-md-4">
+        <div className="col-md-6">
           <label htmlFor="validationCustom01" className="form-label">
             Start date
           </label>
           <input
-            type="text"
+            type="date"
+            min={new Date().toISOString().split("T")[0]}
+            max={endDate}
+            defaultValue={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
             className="form-control"
             id="validationCustom01"
             required
           />
         </div>
 
-        <div className="col-md-4">
+        <div className="col-md-6">
           <label htmlFor="validationCustom02" className="form-label">
             End date
           </label>
           <input
-            type="text"
+            type="date"
+            min={startDate}
+            defaultValue={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
             className="form-control"
             id="validationCustom02"
             required
           />
         </div>
 
-        <div className="col-md-4">
-          <label htmlFor="validationCustomUsername" className="form-label">
-            Number of travellers
-          </label>
-          <div className="input-group has-validation">
-            <input
-              type="text"
-              className="form-control"
-              id="validationCustomUsername"
-              required
-            />
-          </div>
-        </div>
-
-        <div className="col-9" />
-        <div className="col-3">
+        <div className="col-3" style={{width: "100%", alignItems: "right"}}>
           <button
             className="btn btn-primary"
-            style={{ width: "100%", marginTop: "2em" }}
+            style={{ width: "25%", marginTop: "2em" }}
             type="submit"
           >
             Check

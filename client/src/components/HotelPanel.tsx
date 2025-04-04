@@ -64,14 +64,7 @@ const HotelPanel = ({ roomID }: Props) => {
             {room.rating} stars
           </div>
         </div>
-        <div className="row">
-          <p style={{ textAlign: "justify", marginTop: "1em" }}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras eget
-            finibus turpis. Fusce congue nisl sit amet sem dictum, ac egestas
-            orci ultrices. Sed ultricies sollicitudin egestas. Duis maximus odio
-            lectus, ac facilisis nisl pulvinar dictum.
-          </p>
-        </div>
+
         <div
           className="row row-cols-1 row-cols-md-2 g-4"
           style={{ marginTop: "0.5em" }}

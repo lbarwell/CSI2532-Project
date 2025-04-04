@@ -85,6 +85,7 @@ const Home = () => {
                 className="form-control"
                 id="endDateField"
                 min={startDate}
+                defaultValue={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
               />
             </div>
