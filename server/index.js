@@ -142,7 +142,7 @@ app.post("/hotelrooms", async(req, res) => {
 // Get all hotels in given order and with search filters
 app.get("/hotelinfo", async(req, res) => {
     try {
-        const { sort, reverse, destination, travellers } = req.query;
+        const { sort, reverse, destination, travellers, rating } = req.query;
         const orderDirection = reverse === "true" ? "DESC" : "ASC";
 
         const allHotels = await pool.query(`
@@ -152,7 +152,10 @@ app.get("/hotelinfo", async(req, res) => {
                     SELECT MIN(r2.price)
                     FROM hotel_room r2
                     WHERE r2.hotel_number = h.hotel_number
-                ) ${destination !== "" ? `AND h.city LIKE '%${destination}%'` : ""} AND r.capacity >= ${travellers}
+                ) 
+                ${destination !== "" ? `AND h.city LIKE '%${destination}%'` : ""}
+                ${travellers !== "" ? `AND r.capacity >= ${travellers}`: "" } 
+                ${rating !== "" ? `r.capacity >= ${travellers}`: "" } 
                 ORDER BY ${sort} ${orderDirection}`)
 
         res.json(allHotels.rows);
@@ -216,6 +219,68 @@ app.post("/employees", async(req, res) => {
         res.json(newEmployee.rows);
     } catch (error) {
         console.error(error.message);
+    }
+});
+
+// # Reservations # //
+
+// Get an reservations by Hotel ID
+app.get("/reservations/:hotel_id", async(req, res) => {
+    try {
+        const { hotel_id } = req.params;
+        const reservation = await pool.query(`SELECT * FROM reservation WHERE reservation_id = ${hotel_id}`);
+
+        res.json(reservation.rows);
+    } catch (error) {
+        console.error(error.message);
+    }
+});
+
+// Create Reservations 
+app.post("/reservations", async(req, res) => {
+    try {
+        const { res_id, customer, hotel_room_id, status, start_date, end_date, reservation_date } = req.body;
+        const newReservation = await pool.query(`INSERT INTO reservation 
+            (reservation_id, customer_sin, hotel_room_id, status, start_date, end_date, reservation_date ) VALUES 
+            (${res_id}, ${customer}, ${hotel_room_id}, '${status}', ${start_date}, ${end_date}, ${reservation_dat}) RETURNING *`);
+
+        res.json(newReservation.rows);
+    } catch (error) {
+        console.error(error.message);
+    }
+});
+
+// Update Reservation
+app.put("/reservations/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status, start_date, end_date, hotel_room_id } = req.body;
+        const updatedReservation = await pool.query(`
+        UPDATE reservation
+        SET status = '${status}',
+            start_date = ${start_date},
+            end_date = ${end_date},
+            hotel_room_id = ${hotel_room_id}
+        WHERE reservation_id = ${id};
+        `, [status, start_date, end_date, hotel_room_id, id]);
+
+        res.json(updatedReservation.rows[0]);
+    } catch (error) {
+        console.error(error.message);
+        res.status(3000).send("Server Error");
+    }
+});
+
+app.delete("/reservations/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        await pool.query(`
+            "DELETE FROM reservation WHERE reservation_id = ${id}"
+            `);
+        res.json({ message: "Reservation deleted successfully" });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Server Error");
     }
 });
 
