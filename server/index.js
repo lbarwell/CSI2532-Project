@@ -4,7 +4,7 @@ const cors = require("cors");
 const pool = require("./db");
 
 // Port to listen on
-const port = 5000;
+const port = 3000;
 
 // App setup
 const app = express();
