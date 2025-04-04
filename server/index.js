@@ -58,10 +58,9 @@ app.post("/hotelchains", async(req, res) => {
 app.delete("/hotelchains/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        await pool.query(
-            "DELETE FROM hotel_chain WHERE chain_number = $1",
-            [id]
-        );
+        await pool.query(`
+            "DELETE FROM hotel_chain WHERE chain_number = ${id}"
+            `);
         res.json({ message: "Hotel chain deleted successfully" });
     } catch (error) {
         console.error(error.message);
@@ -113,17 +112,15 @@ app.post("/hotels", async(req, res) => {
 app.delete("/hotels/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        await pool.query(
-            "DELETE FROM hotel WHERE hotel_number = $1",
-            [id]
-        );
+        await pool.query(`
+            "DELETE FROM hotel WHERE hotel_number = ${id}"
+            `);
         res.json({ message: "Hotel deleted successfully" });
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Server Error");
     }
 });
-
 
 // # Hotel room # //
 
@@ -168,10 +165,9 @@ app.post("/hotelrooms", async(req, res) => {
 app.delete("/hotelrooms/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        await pool.query(
-            "DELETE FROM hotel_room WHERE hotel_room_id = $1",
-            [id]
-        );
+        await pool.query(`
+            "DELETE FROM hotel_room WHERE hotel_room_id = ${id}"
+            `);
         res.json({ message: "Hotel room deleted successfully" });
     } catch (error) {
         console.error(error.message);
@@ -272,10 +268,9 @@ app.post("/employees", async(req, res) => {
 app.delete("/employees/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        await pool.query(
-            "DELETE FROM employee WHERE employee_id = $1",
-            [id]
-        );
+        await pool.query(`
+            "DELETE FROM employee WHERE employee_id = ${id}"
+            `);
         res.json({ message: "Employee deleted successfully" });
     } catch (error) {
         console.error(error.message);
