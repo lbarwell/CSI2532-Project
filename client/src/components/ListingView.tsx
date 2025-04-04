@@ -18,17 +18,26 @@ interface Hotel {
 }
 
 const ListingView = () => {
+  const [hotels, setHotels] = useState<Hotel[]>([]);
+  const [selectedSort, setSelectedSort] = useState("Name");
+
   const [searchParams] = useSearchParams();
 
-  const sort = searchParams.get("sort");
-  const reverse = searchParams.get("reverse");
   const destination = searchParams.get("destination");
   const startDate = searchParams.get("start");
   const endDate = searchParams.get("end");
   const capacity = searchParams.get("capacity");
   const chain = searchParams.get("chain");
 
-  const [hotels, setHotels] = useState<Hotel[]>([]);
+  const filters = {
+    sort: "Name",
+    reverse: false,
+    destination: destination === null ? "" : destination,
+    start: startDate === null ? "" : startDate,
+    end: endDate === null ? "" : endDate,
+    capacity: capacity === null ? "" : capacity,
+    chain: chain === null ? "" : chain
+  }
 
   const getHotels = async (filters: {
     [key: string]: string | number | boolean;
@@ -48,18 +57,8 @@ const ListingView = () => {
   };
 
   useEffect(() => {
-    getHotels({
-      sort: sort === null ? "" : sort,
-      reverse: reverse === null ? "" : reverse,
-      destination: destination === null ? "" : destination,
-      start: startDate === null ? "" : startDate,
-      end: endDate === null ? "" : endDate,
-      capacity: capacity === null ? "" : capacity,
-      chain: chain === null ? "" : chain
-    });
+    getHotels(filters);
   }, []);
-
-  const [selectedSort, setSelectedSort] = useState("Name");
 
   return (
     <div style={{ margin: "1em" }}>
@@ -78,7 +77,7 @@ const ListingView = () => {
               data-bs-toggle="dropdown"
               style={{ width: "100%", textAlign: "center" }}
             >
-              {selectedSort}
+              {filters.sort}
             </button>
 
             <ul
@@ -90,7 +89,8 @@ const ListingView = () => {
                   className="dropdown-item"
                   onClick={() => {
                     setSelectedSort("Name");
-                    getHotels({ sort: "name", reverse: false });
+                    filters.sort = "name"; filters.reverse = false;
+                    getHotels(filters);
                   }}
                 >
                   Name
@@ -100,8 +100,9 @@ const ListingView = () => {
                 <a
                   className="dropdown-item"
                   onClick={() => {
-                    setSelectedSort("Star rating");
-                    getHotels({ sort: "rating", reverse: true });
+                    setSelectedSort("Rating");
+                    filters.sort = "rating"; filters.reverse = true;
+                    getHotels(filters);
                   }}
                 >
                   Star rating
@@ -112,7 +113,8 @@ const ListingView = () => {
                   className="dropdown-item"
                   onClick={() => {
                     setSelectedSort("Price: low to high");
-                    getHotels({ sort: "price", reverse: false });
+                    filters.sort = "price"; filters.reverse = false;
+                    getHotels(filters);
                   }}
                 >
                   Price: low to high
@@ -123,7 +125,8 @@ const ListingView = () => {
                   className="dropdown-item"
                   onClick={() => {
                     setSelectedSort("Price: high to low");
-                    getHotels({ sort: "price", reverse: true });
+                    filters.sort = "price"; filters.reverse = true;
+                    getHotels(filters);
                   }}
                 >
                   Price: high to low
