@@ -16,31 +16,17 @@ const FilterView = () => {
   const [maxPrice, setMaxPrice] = useState(600);
   const [rating, setRating] = useState(3);
   const [capacity, setCapacity] = useState(11);
-  const [amenities, setAmenities] = useState<string[]>([]);
+  const [chain, setChain] = useState("Select");
 
   const filters = {
     minPrice: minPrice,
     maxPrice: maxPrice,
     minRating: rating,
     minCapacity: capacity,
-    amenities: amenities
+    chain: chain === "Select" ? "" : chain,
   };
 
-  const amenitiesValues = ["Pool", "TV", "Spa", "Kitchen", "Gym"];
-
-  const addAmenity = (value: string) => {
-    if (amenities.includes(value)) {
-      const index = amenities.indexOf(value)
-
-      console.log(amenities, amenities.splice(index, 1))
-
-      setAmenities(amenities.splice(index, 1))
-    } else {
-      console.log(amenities, [value].concat(amenities))
-
-      setAmenities([value].concat(amenities))
-    }
-  }
+  const chains = ["Luxury Stays", "Budget Inn"];
 
   return (
     <div
@@ -135,25 +121,37 @@ const FilterView = () => {
 
       <div>
         <label className="form-label" style={{ marginTop: "1em" }}>
-          <b>Amenities</b>
+          <b>Hotel chain</b>
         </label>
 
-        {amenitiesValues.map((amenity) => (
-          <div className="form-check" key={amenitiesValues.indexOf(amenity)}>
-            <input
-              className="form-check-input"
-              type="checkbox"
-              id={"checkbox" + amenitiesValues.indexOf(amenity)}
-              onClick={() => addAmenity(amenity)}
-            />
-            <label
-              className="form-check-label"
-              htmlFor={"checkbox" + amenities.indexOf(amenity)}
-            >
-              {amenity}
-            </label>
-          </div>
-        ))}
+        <div className="col dropdown">
+          <button
+            className="btn btn-primary dropdown-toggle"
+            type="button"
+            data-bs-toggle="dropdown"
+            style={{ width: "100%", textAlign: "center" }}
+          >
+            {chain}
+          </button>
+
+          <ul
+            className="dropdown-menu"
+            style={{ width: "100%", textAlign: "center" }}
+          >
+            {chains.map((chainName) => (
+              <li key={chainName}>
+                <a
+                  className="dropdown-item"
+                  onClick={() => {
+                    setChain(chainName);
+                  }}
+                >
+                  {chainName}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );
