@@ -1,26 +1,46 @@
-import { useEffect, useState } from "react";
-
-interface Amenity {
-  text: string;
-  isChecked: boolean;
-}
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const FilterView = () => {
-  const [amenities, setAmenities] = useState<Amenity[]>([]);
-  const [capacity, setCapacity] = useState(11);
-  const [rating, setRating] = useState(3);
+  const navigate = useNavigate();
 
-  const data = [{ text: "Pool", isChecked: false }];
+  const onSearch = (filters: { [key: string]: any }) => {
+    const params = new URLSearchParams(
+      filters as Record<string, string>
+    ).toString();
 
-  useEffect(() => setAmenities(data), []);
-
-  const onSelectAll = () => {
-    for (const amenity of amenities) {
-      amenity.isChecked = true;
-    }
-
-    setAmenities(amenities);
+    navigate(`/search?${params}`);
   };
+
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(600);
+  const [rating, setRating] = useState(3);
+  const [capacity, setCapacity] = useState(11);
+  const [amenities, setAmenities] = useState<string[]>([]);
+
+  const filters = {
+    minPrice: minPrice,
+    maxPrice: maxPrice,
+    minRating: rating,
+    minCapacity: capacity,
+    amenities: amenities
+  };
+
+  const amenitiesValues = ["Pool", "TV", "Spa", "Kitchen", "Gym"];
+
+  const addAmenity = (value: string) => {
+    if (amenities.includes(value)) {
+      const index = amenities.indexOf(value)
+
+      console.log(amenities, amenities.splice(index, 1))
+
+      setAmenities(amenities.splice(index, 1))
+    } else {
+      console.log(amenities, [value].concat(amenities))
+
+      setAmenities([value].concat(amenities))
+    }
+  }
 
   return (
     <div
@@ -38,6 +58,7 @@ const FilterView = () => {
         type="submit"
         className="col btn btn-primary"
         style={{ marginTop: "3em", width: "100%" }}
+        onClick={() => onSearch(filters)}
       >
         Apply filters
       </button>
@@ -53,7 +74,8 @@ const FilterView = () => {
               className="form-control"
               id="minInput"
               min={0}
-              defaultValue={0}
+              defaultValue={minPrice}
+              onChange={(e) => setMinPrice(Number(e.target.value))}
             />
             <label htmlFor="minInput" style={{ marginLeft: "0.5em" }}>
               Min
@@ -65,7 +87,8 @@ const FilterView = () => {
               className="form-control"
               id="maxInput"
               min={0}
-              defaultValue={600}
+              defaultValue={maxPrice}
+              onChange={(e) => setMaxPrice(Number(e.target.value))}
             />
             <label htmlFor="maxInput" style={{ marginLeft: "0.5em" }}>
               Max
@@ -98,7 +121,7 @@ const FilterView = () => {
           className="form-label"
           style={{ marginTop: "1em" }}
         >
-          <b>Minimum capacity ({capacity} people)</b>
+          <b>Minimum capacity ({capacity})</b>
         </label>
         <input
           type="range"
@@ -114,32 +137,20 @@ const FilterView = () => {
         <label className="form-label" style={{ marginTop: "1em" }}>
           <b>Amenities</b>
         </label>
-        <div className="form-check">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            value=""
-            id="selectAllCheckbox"
-            onClick={onSelectAll}
-          />
-          <label className="form-check-label" htmlFor="selectAllCheckbox">
-            Select all
-          </label>
-        </div>
 
-        {amenities.map((amenity) => (
-          <div className="form-check" key={amenities.indexOf(amenity)}>
+        {amenitiesValues.map((amenity) => (
+          <div className="form-check" key={amenitiesValues.indexOf(amenity)}>
             <input
               className="form-check-input"
               type="checkbox"
-              value=""
-              id={"checkbox" + amenities.indexOf(amenity)}
+              id={"checkbox" + amenitiesValues.indexOf(amenity)}
+              onClick={() => addAmenity(amenity)}
             />
             <label
               className="form-check-label"
               htmlFor={"checkbox" + amenities.indexOf(amenity)}
             >
-              {amenity.text}
+              {amenity}
             </label>
           </div>
         ))}
