@@ -4,7 +4,7 @@ const cors = require("cors");
 const pool = require("./db");
 
 // Port to listen on
-const port = 3000;
+const port = 5000;
 
 // App setup
 const app = express();
@@ -180,23 +180,25 @@ app.delete("/hotelrooms/:id", async (req, res) => {
 // Get all hotels in given order and with search filters
 app.get("/hotelinfo", async(req, res) => {
     try {
-        const { sort, reverse, destination, travellers, rating, minPrice, maxPrice, chainName } = req.query;
+        const { sort, reverse, destination, capacity, rating, minPrice, maxPrice, chainName } = req.query;
         const orderDirection = reverse === "true" ? "DESC" : "ASC";
 
         const allHotels = await pool.query(`
-                SELECT r.room_number, h.hotel_number, h.name, h.city, h.state, h.rating, r.price, r.capacity, c.name
-                FROM hotel h JOIN hotel_room r ON h.hotel_number = r.hotel_number 
+                SELECT r.room_number, h.hotel_number, h.name, h.city, h.state, h.rating, r.amenities, r.price, r.capacity, c.name
+                FROM hotel h 
+                JOIN hotel_room r ON h.hotel_number = r.hotel_number 
+                JOIN hotel_chain c ON c.chain_number = h.chain_number 
                 WHERE r.price = (
                     SELECT MIN(r2.price)
                     FROM hotel_room r2
                     WHERE r2.hotel_number = h.hotel_number
                 ) 
                 ${destination !== "" ? `AND h.city LIKE '%${destination}%'` : ""}
-                ${travellers !== "" ? `AND r.capacity >= ${travellers}`: "" } 
-                ${rating !== "" ? `r.capacity >= ${travellers}`: "" } 
-                ${minPrice !== "" ? `r.price >= ${minPrice}`: "" }  //check this 
-                ${maxPrice !== "" ? `r.price <= ${maxPrice}`: "" } //check this 
-                ${chainName !== "" ? `AND c.name LIKE '%${chainName }%'`: "" } //check this 
+                ${capacity !== "" ? `AND r.capacity >= ${capacity}`: "" } 
+                ${rating !== "" ? `AND r.capacity >= ${capacity}`: "" } 
+                ${minPrice !== "" ? `AND r.price >= ${minPrice}`: "" }
+                ${maxPrice !== "" ? `AND r.price <= ${maxPrice}`: "" }
+                ${chainName !== "" ? `AND c.name LIKE '%${chainName}%'`: "" }
                 ORDER BY ${sort} ${orderDirection}`)
 
         res.json(allHotels.rows);
