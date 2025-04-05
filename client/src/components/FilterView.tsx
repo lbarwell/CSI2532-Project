@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const FilterView = () => {
   const navigate = useNavigate();
 
-  const onSearch = (filters: { [key: string]: any }) => {
+  const onApplyFilters = (filters: { [key: string]: any }) => {
     const params = new URLSearchParams(
       filters as Record<string, string>
     ).toString();
@@ -15,32 +15,31 @@ const FilterView = () => {
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(600);
   const [rating, setRating] = useState(3);
-  const [capacity, setCapacity] = useState(11);
-  const [amenities, setAmenities] = useState<string[]>([]);
+  const [chain, setChain] = useState("Select one");
+
+  const [searchParams] = useSearchParams();
+
+    const sort = searchParams.get("sort");
+    const reverse = searchParams.get("reverse");
+    const destination = searchParams.get("destination");
+    const startDate = searchParams.get("start");
+    const endDate = searchParams.get("end");
+    const capacity = searchParams.get("capacity");
 
   const filters = {
+    sort: sort,
+    reverse: reverse,
+    destination: destination,
+    start: startDate,
+    end: endDate,
+    capacity: capacity,
     minPrice: minPrice,
     maxPrice: maxPrice,
     minRating: rating,
-    minCapacity: capacity,
-    amenities: amenities
+    chain: chain === "Select one" ? "" : chain,
   };
 
-  const amenitiesValues = ["Pool", "TV", "Spa", "Kitchen", "Gym"];
-
-  const addAmenity = (value: string) => {
-    if (amenities.includes(value)) {
-      const index = amenities.indexOf(value)
-
-      console.log(amenities, amenities.splice(index, 1))
-
-      setAmenities(amenities.splice(index, 1))
-    } else {
-      console.log(amenities, [value].concat(amenities))
-
-      setAmenities([value].concat(amenities))
-    }
-  }
+  const chains = ["Select one", "Luxury Stays", "Budget Inn"];
 
   return (
     <div
@@ -57,8 +56,8 @@ const FilterView = () => {
       <button
         type="submit"
         className="col btn btn-primary"
-        style={{ marginTop: "3em", width: "100%" }}
-        onClick={() => onSearch(filters)}
+        style={{ marginTop: "1em", width: "100%" }}
+        onClick={() => onApplyFilters(filters)}
       >
         Apply filters
       </button>
@@ -116,44 +115,38 @@ const FilterView = () => {
       </div>
 
       <div>
-        <label
-          htmlFor="capacityRange"
-          className="form-label"
-          style={{ marginTop: "1em" }}
-        >
-          <b>Minimum capacity ({capacity})</b>
-        </label>
-        <input
-          type="range"
-          className="form-range"
-          min="1"
-          max="20"
-          id="capacityRange"
-          onChange={(e) => setCapacity(Number(e.target.value))}
-        />
-      </div>
-
-      <div>
         <label className="form-label" style={{ marginTop: "1em" }}>
-          <b>Amenities</b>
+          <b>Hotel chain</b>
         </label>
 
-        {amenitiesValues.map((amenity) => (
-          <div className="form-check" key={amenitiesValues.indexOf(amenity)}>
-            <input
-              className="form-check-input"
-              type="checkbox"
-              id={"checkbox" + amenitiesValues.indexOf(amenity)}
-              onClick={() => addAmenity(amenity)}
-            />
-            <label
-              className="form-check-label"
-              htmlFor={"checkbox" + amenities.indexOf(amenity)}
-            >
-              {amenity}
-            </label>
-          </div>
-        ))}
+        <div className="col dropdown">
+          <button
+            className="btn btn-primary dropdown-toggle"
+            type="button"
+            data-bs-toggle="dropdown"
+            style={{ width: "100%", textAlign: "center" }}
+          >
+            {chain}
+          </button>
+
+          <ul
+            className="dropdown-menu"
+            style={{ width: "100%", textAlign: "center" }}
+          >
+            {chains.map((chainName) => (
+              <li key={chainName}>
+                <a
+                  className="dropdown-item"
+                  onClick={() => {
+                    setChain(chainName);
+                  }}
+                >
+                  {chainName}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );

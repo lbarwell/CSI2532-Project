@@ -48,7 +48,6 @@ const LoginPage = () => {
           style={{ width: "100%", marginTop: "1em" }}
           onClick={() => {
             setLoggedIn(true);
-            console.log(isLoggedIn);
             navigate("/employees/1");
           }}
         >

@@ -14,17 +14,22 @@ interface Table {
 }
 
 const EmployeePage = ({ isLoggedIn }: Props) => {
-  const reservationInfo = {
-    tableName: "Reservations",
-    headers: ["Room ID", "User ID", "First name", "Last name"],
-    tableData: [
-      [324, 32, "Michael", "Scott"],
-      [222, 4, "Cristiano", "Ronaldo"],
-    ],
-  };
-
-  const [table, setTable] = useState<Table>(reservationInfo);
+  const [table, setTable] = useState<Table>({tableName: "No data", headers: [], tableData: []});
   const [activeView, setActiveView] = useState("reservations");
+
+  const getReservations = async() => {
+    try {
+      const response = await fetch(`http://localhost:5000/reservations`);
+      const jsonData = await response.json();
+
+      const headers = jsonData[0].keys()
+      const [values] = jsonData.values()
+
+      setTable({ tableName: "reservations", headers: headers, tableData: values});
+    } catch (error: any) {
+      console.error(error.message);
+    }
+  }
 
   if (!isLoggedIn) {
     return (
@@ -50,8 +55,8 @@ const EmployeePage = ({ isLoggedIn }: Props) => {
               activeView === "reservations" ? "active" : ""
             }`}
             onClick={() => {
-              setTable(reservationInfo);
-              setActiveView("reservations");
+              getReservations();
+              setActiveView("reservations")
             }}
           >
             Reservations
@@ -61,11 +66,6 @@ const EmployeePage = ({ isLoggedIn }: Props) => {
           <button
             className={`nav-link ${activeView === "hotels" ? "active" : ""}`}
             onClick={() => {
-              setTable({
-                tableName: "Hotels",
-                headers: ["Hotel name"],
-                tableData: [["New Hotel"], ["Boston Hotel"]],
-              });
               setActiveView("hotels");
             }}
           >
