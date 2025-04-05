@@ -180,8 +180,27 @@ app.delete("/hotelrooms/:id", async (req, res) => {
 // Get all hotels in given order and with search filters
 app.get("/hotelinfo", async(req, res) => {
     try {
-        const { sort, reverse, destination, capacity, rating, minPrice, maxPrice, chainName } = req.query;
+        const { sort, reverse, destination, start, end, capacity, rating, minPrice, maxPrice, chainName } = req.query;
+        const nameSort = sort === "name" ? "h." : ""
         const orderDirection = reverse === "true" ? "DESC" : "ASC";
+
+        console.log(`
+                SELECT r.room_number, h.hotel_number, h.name, h.city, h.state, h.rating, r.amenities, r.price, r.capacity, c.name
+                FROM hotel h 
+                JOIN hotel_room r ON h.hotel_number = r.hotel_number 
+                JOIN hotel_chain c ON c.chain_number = h.chain_number 
+                WHERE r.price = (
+                    SELECT MIN(r2.price)
+                    FROM hotel_room r2
+                    WHERE r2.hotel_number = h.hotel_number
+                ) 
+                ${destination !== "" ? `AND h.city LIKE '%${destination}%'` : ""}
+                ${capacity !== "" ? `AND r.capacity >= ${capacity}`: ""}
+                ${rating !== "" ? `AND h.rating >= ${rating}`: ""}
+                ${minPrice !== "" ? `AND r.price >= ${minPrice}`: ""}
+                ${maxPrice !== "" ? `AND r.price <= ${maxPrice}`: ""}
+                ${chainName !== "" ? `AND c.name = '${chainName}'`: ""}
+                ORDER BY ${nameSort + sort} ${orderDirection}`)
 
         const allHotels = await pool.query(`
                 SELECT r.room_number, h.hotel_number, h.name, h.city, h.state, h.rating, r.amenities, r.price, r.capacity, c.name
@@ -194,12 +213,12 @@ app.get("/hotelinfo", async(req, res) => {
                     WHERE r2.hotel_number = h.hotel_number
                 ) 
                 ${destination !== "" ? `AND h.city LIKE '%${destination}%'` : ""}
-                ${capacity !== "" ? `AND r.capacity >= ${capacity}`: "" } 
-                ${rating !== "" ? `AND r.capacity >= ${capacity}`: "" } 
-                ${minPrice !== "" ? `AND r.price >= ${minPrice}`: "" }
-                ${maxPrice !== "" ? `AND r.price <= ${maxPrice}`: "" }
-                ${chainName !== "" ? `AND c.name LIKE '%${chainName}%'`: "" }
-                ORDER BY ${sort} ${orderDirection}`)
+                ${capacity !== "" ? `AND r.capacity >= ${capacity}`: ""}
+                ${rating !== "" ? `AND h.rating >= ${rating}`: ""}
+                ${minPrice !== "" ? `AND r.price >= ${minPrice}`: ""}
+                ${maxPrice !== "" ? `AND r.price <= ${maxPrice}`: ""}
+                ${chainName !== "" ? `AND c.name = '${chainName}'`: ""}
+                ORDER BY ${nameSort + sort} ${orderDirection}`)
 
         res.json(allHotels.rows);
     } catch (error) {

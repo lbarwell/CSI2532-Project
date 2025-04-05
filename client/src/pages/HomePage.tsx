@@ -114,7 +114,12 @@ const Home = () => {
                 marginTop: "2em",
               }}
               onClick={() =>
-                onSearch({ sort: "name", reverse: false, destination: destination, start: startDate, end: endDate, capacity: travellers })
+                onSearch({
+                  destination: destination,
+                  start: startDate,
+                  end: endDate,
+                  capacity: travellers,
+                })
               }
             >
               Search

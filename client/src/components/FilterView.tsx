@@ -1,15 +1,12 @@
 import { useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
 
 const FilterView = () => {
-  const navigate = useNavigate();
-
   const onApplyFilters = (filters: { [key: string]: any }) => {
     const params = new URLSearchParams(
       filters as Record<string, string>
     ).toString();
 
-    navigate(`/search?${params}`);
+    window.location.href = `/#/search?${params}`;
   };
 
   const [minPrice, setMinPrice] = useState(0);
@@ -17,22 +14,7 @@ const FilterView = () => {
   const [rating, setRating] = useState(3);
   const [chain, setChain] = useState("Select one");
 
-  const [searchParams] = useSearchParams();
-
-    const sort = searchParams.get("sort");
-    const reverse = searchParams.get("reverse");
-    const destination = searchParams.get("destination");
-    const startDate = searchParams.get("start");
-    const endDate = searchParams.get("end");
-    const capacity = searchParams.get("capacity");
-
   const filters = {
-    sort: sort,
-    reverse: reverse,
-    destination: destination,
-    start: startDate,
-    end: endDate,
-    capacity: capacity,
     minPrice: minPrice,
     maxPrice: maxPrice,
     minRating: rating,

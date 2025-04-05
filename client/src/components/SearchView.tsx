@@ -1,12 +1,29 @@
 import { useState } from "react";
 
 const SearchView = () => {
+  const [destination, setDestination] = useState("");
   const [startDate, setStartDate] = useState(
     new Date().toISOString().split("T")[0]
   );
   const [endDate, setEndDate] = useState(
     new Date().toISOString().split("T")[0]
   );
+  const [capacity, setCapacity] = useState(1);
+
+  const filters = {
+    destination: destination,
+    start: startDate,
+    end: endDate,
+    capacity: capacity,
+  };
+
+  const onSearch = (filters: { [key: string]: any }) => {
+    const params = new URLSearchParams(
+      filters as Record<string, string>
+    ).toString();
+
+    window.location.href = `/#/search?${params}`;
+  };
 
   return (
     <form style={{ margin: "1em", borderBottom: "solid lightgray" }}>
@@ -21,6 +38,7 @@ const SearchView = () => {
               className="form-control"
               id="destination"
               placeholder="New York"
+              onChange={(e) => setDestination(e.target.value)}
             />
           </div>
 
@@ -63,6 +81,7 @@ const SearchView = () => {
               min={1}
               max={20}
               defaultValue="1"
+              onChange={(e) => setCapacity(Number(e.target.value))}
             />
           </div>
 
@@ -70,6 +89,7 @@ const SearchView = () => {
             type="submit"
             className="col btn btn-primary"
             style={{ height: "40%", margin: "2em" }}
+            onClick={() => onSearch(filters)}
           >
             Search
           </button>

@@ -27,17 +27,23 @@ const ListingView = () => {
   const startDate = searchParams.get("start");
   const endDate = searchParams.get("end");
   const capacity = searchParams.get("capacity");
-  const chain = searchParams.get("chain");
+  const rating = searchParams.get("minRating");
+  const minPrice = searchParams.get("minPrice");
+  const maxPrice = searchParams.get("maxPrice");
+  const chainName = searchParams.get("chain");
 
   const filters = {
-    sort: "Name",
+    sort: "name",
     reverse: false,
     destination: destination === null ? "" : destination,
     start: startDate === null ? "" : startDate,
     end: endDate === null ? "" : endDate,
     capacity: capacity === null ? "" : capacity,
-    chain: chain === null ? "" : chain
-  }
+    rating: rating === null ? "" : rating,
+    minPrice: minPrice === null ? "" : minPrice,
+    maxPrice: maxPrice === null ? "" : maxPrice,
+    chainName: chainName === null ? "" : chainName,
+  };
 
   const getHotels = async (filters: {
     [key: string]: string | number | boolean;
@@ -77,7 +83,7 @@ const ListingView = () => {
               data-bs-toggle="dropdown"
               style={{ width: "100%", textAlign: "center" }}
             >
-              {filters.sort}
+              {selectedSort}
             </button>
 
             <ul
@@ -89,7 +95,8 @@ const ListingView = () => {
                   className="dropdown-item"
                   onClick={() => {
                     setSelectedSort("Name");
-                    filters.sort = "name"; filters.reverse = false;
+                    filters.sort = "name";
+                    filters.reverse = false;
                     getHotels(filters);
                   }}
                 >
@@ -101,7 +108,8 @@ const ListingView = () => {
                   className="dropdown-item"
                   onClick={() => {
                     setSelectedSort("Rating");
-                    filters.sort = "rating"; filters.reverse = true;
+                    filters.sort = "rating";
+                    filters.reverse = true;
                     getHotels(filters);
                   }}
                 >
@@ -113,7 +121,8 @@ const ListingView = () => {
                   className="dropdown-item"
                   onClick={() => {
                     setSelectedSort("Price: low to high");
-                    filters.sort = "price"; filters.reverse = false;
+                    filters.sort = "price";
+                    filters.reverse = false;
                     getHotels(filters);
                   }}
                 >
@@ -125,7 +134,8 @@ const ListingView = () => {
                   className="dropdown-item"
                   onClick={() => {
                     setSelectedSort("Price: high to low");
-                    filters.sort = "price"; filters.reverse = true;
+                    filters.sort = "price";
+                    filters.reverse = true;
                     getHotels(filters);
                   }}
                 >

@@ -24,7 +24,7 @@ const Navbar = () => {
               <a
                 className="nav-link active"
                 aria-current="page"
-                href="/#/search?sort=name&reverse=false"
+                href="/#/search"
               >
                 Search
               </a>
