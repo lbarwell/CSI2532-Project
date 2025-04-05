@@ -1,5 +1,3 @@
-CREATE DATABASE hoteldb;
-
 -- 1) HOTEL_CHAIN
 CREATE TABLE hotel_chain (
     chain_number INT PRIMARY KEY,
