@@ -28,17 +28,21 @@ app.get("/hotelchains", async(req, res) => {
     }
 });
 
-// Get a hotel chain by ID
+// Get a hotel chain by ID (using index on hotel.chain_number)
 app.get("/hotelchains/:id", async(req, res) => {
     try {
         const { id } = req.params;
-        const hotelChain = await pool.query(`SELECT * FROM hotel_chain WHERE chain_number = ${id}`);
-
+        const hotelChain = await pool.query(
+            'SELECT * FROM hotel_chain WHERE chain_number = $1',
+            [id]
+        );
         res.json(hotelChain.rows);
     } catch (error) {
         console.error(error.message);
+        res.status(500).send("Server Error");
     }
 });
+
 
 // Create a hotel chain
 app.post("/hotelchains", async(req, res) => {
@@ -58,15 +62,16 @@ app.post("/hotelchains", async(req, res) => {
 app.delete("/hotelchains/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        await pool.query(`
-            "DELETE FROM hotel_chain WHERE chain_number = ${id}"
-            `);
-        res.json({ message: "Hotel chain deleted successfully" });
+        await pool.query('DELETE FROM hotel WHERE chain_number = $1', [id]);
+        await pool.query('DELETE FROM hotel_chain WHERE chain_number = $1', [id]);
+        res.json({ message: "Hotel chain and associated hotels deleted successfully" });
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Server Error");
     }
 });
+
+
 
 
 // # Hotel # //
@@ -108,19 +113,21 @@ app.post("/hotels", async(req, res) => {
     }
 });
 
-// Delete a hotel by hotel_number
+// delete hotel
 app.delete("/hotels/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        await pool.query(`
-            "DELETE FROM hotel WHERE hotel_number = ${id}"
-            `);
-        res.json({ message: "Hotel deleted successfully" });
+        // Delete hotel rooms that reference the hotel first
+        await pool.query('DELETE FROM hotel_room WHERE hotel_number = $1', [id]);
+        // Then delete the hotel
+        await pool.query('DELETE FROM hotel WHERE hotel_number = $1', [id]);
+        res.json({ message: "Hotel and associated hotel rooms deleted successfully" });
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Server Error");
     }
 });
+
 
 // # Hotel room # //
 
@@ -166,7 +173,7 @@ app.delete("/hotelrooms/:id", async (req, res) => {
     try {
         const { id } = req.params;
         await pool.query(`
-            "DELETE FROM hotel_room WHERE hotel_room_id = ${id}"
+            DELETE FROM hotel_room WHERE hotel_room_id = ${id}
             `);
         res.json({ message: "Hotel room deleted successfully" });
     } catch (error) {
@@ -272,7 +279,7 @@ app.delete("/employees/:id", async (req, res) => {
     try {
         const { id } = req.params;
         await pool.query(`
-            "DELETE FROM employee WHERE employee_id = ${id}"
+            DELETE FROM employee WHERE employee_id = ${id}
             `);
         res.json({ message: "Employee deleted successfully" });
     } catch (error) {
@@ -283,12 +290,28 @@ app.delete("/employees/:id", async (req, res) => {
 
 // # Users # //
 
+// get all users 
+app.get("/users", async (req, res) => {
+    try {
+        const usersResult = await pool.query('SELECT * FROM "user"');
+        res.json(usersResult.rows);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Server Error");
+    }
+});
+
 // Get a user by ID
 app.get("/users/:id", async (req, res) => {
     try {
-        const { id } = req.params;
+        const id = parseInt(req.params.id, 10);
+        
+        if (isNaN(id)) {
+            return res.status(400).json({ message: "Invalid user ID" });
+        }
         const userResult = await pool.query(
-            `SELECT * FROM "user" WHERE social_insurance_number = ${id}`
+            'SELECT * FROM "user" WHERE social_insurance_number = $1',
+            [id]
         );
         if (userResult.rows.length === 0) {
             return res.status(404).json({ message: "User not found" });
@@ -299,6 +322,8 @@ app.get("/users/:id", async (req, res) => {
         res.status(500).send("Server Error");
     }
 });
+
+
 
 // Create a user
 app.post("/users", async (req, res) => {
@@ -321,24 +346,49 @@ app.post("/users", async (req, res) => {
         const newUser = await pool.query(
             `INSERT INTO "user" 
             (social_insurance_number, first_name, last_name, street_number, street_name, apt_number, city, state, zip_code, email, phone_number, creation_date)
-            VALUES (${social_insurance_number}, ${first_name}, ${last_name}, ${street_number},${street_name}, ${apt_number}, ${city}, ${state}, ${zip_code}, ${email}, ${phone_number}, ${creation_date})
-            RETURNING *;`
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+            RETURNING *;`,
+            [
+                social_insurance_number,
+                first_name,
+                last_name,
+                street_number,
+                street_name,
+                apt_number,
+                city,
+                state,
+                zip_code,
+                email,
+                phone_number,
+                creation_date
+            ]
         );
-        res.json(newUser.rows[0]);
+        res.status(201).json(newUser.rows[0]);
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Server Error");
     }
 });
+
 
 // Delete a user by user_id (social_insurance_number)
 app.delete("/users/:id", async (req, res) => {
     try {
         const { id } = req.params;
+        
+        // Delete employees that reference this user first
         await pool.query(
-            `DELETE FROM "user" WHERE social_insurance_number = ${id}`
+            'DELETE FROM employee WHERE user_id = $1',
+            [id]
         );
-        res.json({ message: "User deleted successfully" });
+        
+        // Then delete the user
+        await pool.query(
+            'DELETE FROM "user" WHERE social_insurance_number = $1',
+            [id]
+        );
+        
+        res.json({ message: "User and associated employee records deleted successfully" });
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Server Error");
@@ -346,7 +396,18 @@ app.delete("/users/:id", async (req, res) => {
 });
 
 
+
 // # Reservations # //
+
+app.get("/reservations", async (req, res) => {
+    try {
+        const reservationsResult = await pool.query('SELECT * FROM reservation');
+        res.json(reservationsResult.rows);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Server Error");
+    }
+});
 
 // Get a reservation by Hotel ID
 app.get("/reservations", async(req, res) => {
@@ -364,8 +425,8 @@ app.get("/reservations", async(req, res) => {
 // Get a reservation by Hotel ID
 app.get("/reservations/:hotel_id", async(req, res) => {
     try {
-        const { hotel_id } = req.params;
-        const reservation = await pool.query(`SELECT * FROM reservation WHERE reservation_id = ${hotel_id}`);
+        const { hotelroom_id } = req.params;
+        const reservation = await pool.query(`SELECT * FROM reservation WHERE reservation_id = ${hotelroom_id}`);
 
         res.json(reservation.rows);
     } catch (error) {
@@ -373,47 +434,57 @@ app.get("/reservations/:hotel_id", async(req, res) => {
     }
 });
 
-// Create Reservations 
-app.post("/reservations", async(req, res) => {
+app.post("/reservations", async (req, res) => {
     try {
         const { res_id, customer, hotel_room_id, status, start_date, end_date, reservation_date } = req.body;
-        const newReservation = await pool.query(`INSERT INTO reservation 
-            (reservation_id, customer_sin, hotel_room_id, status, start_date, end_date, reservation_date ) VALUES 
-            (${res_id}, ${customer}, ${hotel_room_id}, '${status}', ${start_date}, ${end_date}, ${reservation_dat}) RETURNING *`);
-
-        res.json(newReservation.rows);
+        const newReservation = await pool.query(
+            `INSERT INTO reservation 
+            (reservation_id, customer_sin, hotel_room_id, status, start_date, end_date, reservation_date)
+            VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
+            [res_id, customer, hotel_room_id, status, start_date, end_date, reservation_date]
+        );
+        res.status(201).json(newReservation.rows[0]);
     } catch (error) {
         console.error(error.message);
+        res.status(500).send("Server Error");
     }
 });
+
 
 // Update Reservation
 app.put("/reservations/:id", async (req, res) => {
     try {
         const { id } = req.params;
         const { status, start_date, end_date, hotel_room_id } = req.body;
-        const updatedReservation = await pool.query(`
-        UPDATE reservation
-        SET status = '${status}',
-            start_date = ${start_date},
-            end_date = ${end_date},
-            hotel_room_id = ${hotel_room_id}
-        WHERE reservation_id = ${id};
-        `, [status, start_date, end_date, hotel_room_id, id]);
+        const updatedReservation = await pool.query(
+            `UPDATE reservation
+             SET status = $1,
+                 start_date = $2,
+                 end_date = $3,
+                 hotel_room_id = $4
+             WHERE reservation_id = $5
+             RETURNING *;`,
+            [status, start_date, end_date, hotel_room_id, id]
+        );
+
+        if (updatedReservation.rows.length === 0) {
+            return res.status(404).json({ message: "Reservation not found" });
+        }
 
         res.json(updatedReservation.rows[0]);
     } catch (error) {
         console.error(error.message);
-        res.status(3000).send("Server Error");
+        res.status(500).send("Server Error");
     }
 });
+
 
 //delete reservation
 app.delete("/reservations/:id", async (req, res) => {
     try {
         const { id } = req.params;
         await pool.query(`
-            "DELETE FROM reservation WHERE reservation_id = ${id}"
+            DELETE FROM reservation WHERE reservation_id = ${id}
             `);
         res.json({ message: "Reservation deleted successfully" });
     } catch (error) {
@@ -422,19 +493,36 @@ app.delete("/reservations/:id", async (req, res) => {
     }
 });
 
-// get all reservations for a hotel room
+// Get all reservations for a hotel room (using index on reservation.hotel_room_id)
 app.get("/hotelrooms/:id/reservations", async (req, res) => {
     try {
         const { id } = req.params;
-        const reservations = await pool.query(`
-            "SELECT * FROM reservation WHERE hotel_room_id = ${id} "
-            `);
+        const reservations = await pool.query(
+            'SELECT * FROM reservation WHERE hotel_room_id = $1',
+            [id]
+        );
         res.json(reservations.rows);
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Server Error");
     }
 });
+
+// Get all reservations for a given user (using index on reservation.customer_sin)
+app.get("/users/:id/reservations", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const reservations = await pool.query(
+            'SELECT * FROM reservation WHERE customer_sin = $1',
+            [id]
+        );
+        res.json(reservations.rows);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Server Error");
+    }
+});
+
 
 
 //Search
