@@ -186,6 +186,7 @@ INSERT INTO employee (employee_id, user_id, hotel_number, role, password) VALUES
 (3, 456789123, 3, 'Manager', 'pass9101'),
 (4, 321654987, 4, 'Manager', 'pass1121'),
 (5, 654321789, 5, 'Manager', 'pass3141');
+
 Insert INTO reservation (reservation_id, customer_sin, hotel_room_id, status, start_date, end_date, reservation_date)
 VALUES (2,123456789,3,'reserved','2025-04-10','2025-04-12','2025-04-01'),
 (1,987654321,1,'active','2025-04-06','2025-04-12','2025-03-30'),
