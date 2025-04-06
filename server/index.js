@@ -184,26 +184,8 @@ app.get("/hotelinfo", async(req, res) => {
         const nameSort = sort === "name" ? "h." : ""
         const orderDirection = reverse === "true" ? "DESC" : "ASC";
 
-        console.log(`
-                SELECT r.room_number, h.hotel_number, h.name, h.city, h.state, h.rating, r.amenities, r.price, r.capacity, c.name
-                FROM hotel h 
-                JOIN hotel_room r ON h.hotel_number = r.hotel_number 
-                JOIN hotel_chain c ON c.chain_number = h.chain_number 
-                WHERE r.price = (
-                    SELECT MIN(r2.price)
-                    FROM hotel_room r2
-                    WHERE r2.hotel_number = h.hotel_number
-                ) 
-                ${destination !== "" ? `AND h.city LIKE '%${destination}%'` : ""}
-                ${capacity !== "" ? `AND r.capacity >= ${capacity}`: ""}
-                ${rating !== "" ? `AND h.rating >= ${rating}`: ""}
-                ${minPrice !== "" ? `AND r.price >= ${minPrice}`: ""}
-                ${maxPrice !== "" ? `AND r.price <= ${maxPrice}`: ""}
-                ${chainName !== "" ? `AND c.name = '${chainName}'`: ""}
-                ORDER BY ${nameSort + sort} ${orderDirection}`)
-
         const allHotels = await pool.query(`
-                SELECT r.room_number, h.hotel_number, h.name, h.city, h.state, h.rating, r.amenities, r.price, r.capacity, c.name
+                SELECT r.hotel_room_id, h.hotel_number, h.name, h.city, h.state, h.rating, r.amenities, r.price, r.capacity, c.name
                 FROM hotel h 
                 JOIN hotel_room r ON h.hotel_number = r.hotel_number 
                 JOIN hotel_chain c ON c.chain_number = h.chain_number 
@@ -235,7 +217,7 @@ app.get("/hotelinfo/:id", async(req, res) => {
         const roomInfo = await pool.query(`
                 SELECT h.name, h.city, h.state, h.rating, r.amenities, r.price 
                 FROM hotel h JOIN hotel_room r ON h.hotel_number = r.hotel_number 
-                WHERE r.room_number = ${id}`)
+                WHERE r.hotel_room_id = ${id}`)
 
         res.json(roomInfo.rows);
     } catch (error) {
@@ -366,7 +348,20 @@ app.delete("/users/:id", async (req, res) => {
 
 // # Reservations # //
 
-// Get an reservations by Hotel ID
+// Get a reservation by Hotel ID
+app.get("/reservations", async(req, res) => {
+    try {
+        const { id, start, end } = req.query;
+        
+        const reservation = await pool.query(`SELECT * FROM reservation WHERE hotel_room_id = ${id} AND start_date <= '${end}' AND end_date >= '${start}'`);
+
+        res.json(reservation.rows);
+    } catch (error) {
+        console.error(error.message);
+    }
+});
+
+// Get a reservation by Hotel ID
 app.get("/reservations/:hotel_id", async(req, res) => {
     try {
         const { hotel_id } = req.params;

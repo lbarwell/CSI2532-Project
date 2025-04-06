@@ -12,7 +12,7 @@ interface Hotel {
   hotel_number: number;
   name: string;
   price: number;
-  room_number: number;
+  hotel_room_id: number;
   state: string;
   rating: number;
 }
@@ -153,7 +153,7 @@ const ListingView = () => {
             <Listing
               hotelID={hotel.hotel_number}
               hotelName={hotel.name}
-              roomID={hotel.room_number}
+              roomID={hotel.hotel_room_id}
               imageSrc={HiltonImage}
               cityName={hotel.city}
               stateName={hotel.state}

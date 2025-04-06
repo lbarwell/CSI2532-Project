@@ -41,7 +41,6 @@ const HotelPanel = ({ roomID }: Props) => {
     getRoomInfo();
   }, []);
 
-  room.imageSrc = HiltonImage;
   const amenitiesArray = room.amenities.split(",");
 
   return (

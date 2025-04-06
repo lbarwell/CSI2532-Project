@@ -1,6 +1,6 @@
 import Navbar from "../components/Navbar";
 import HotelPanel from "../components/HotelPanel";
-import BookingForm from "../components/AvailabilityForm";
+import BookingForm from "../components/BookingForm";
 import UserCreationForm from "../components/UserCreationForm";
 import { useParams } from "react-router-dom";
 
@@ -16,7 +16,7 @@ const BookingPage = () => {
             <HotelPanel roomID={Number(hotelID)} />
           </div>
           <div className="col">
-            <BookingForm />
+            <BookingForm roomID={Number(hotelID)} />
             <UserCreationForm />
           </div>
         </div>
