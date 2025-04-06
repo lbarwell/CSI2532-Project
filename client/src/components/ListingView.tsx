@@ -33,7 +33,7 @@ const ListingView = () => {
   const chain = searchParams.get("chain");
 
   const filters = {
-    sort: "Name",
+    sort: "name",
     reverse: false,
     destination: destination === null ? "" : destination,
     start: startDate === null ? "" : startDate,
@@ -42,7 +42,7 @@ const ListingView = () => {
     minPrice: minPrice === null ? "" : minPrice,
     maxPrice: maxPrice === null ? "" : maxPrice,
     rating: rating === null ? "" : rating,
-    chain: chain === null ? "" : chain
+    chainName: chain === null ? "" : chain
   }
 
   const getHotels = async (filters: {
@@ -52,6 +52,8 @@ const ListingView = () => {
       const params = new URLSearchParams(
         filters as Record<string, string>
       ).toString();
+
+      console.log(filters.chain)
 
       const response = await fetch(`http://localhost:5000/hotelinfo?${params}`);
       const jsonData = await response.json();

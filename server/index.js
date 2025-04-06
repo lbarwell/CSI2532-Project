@@ -142,11 +142,11 @@ app.post("/hotelrooms", async(req, res) => {
 // Get all hotels in given order and with search filters
 app.get("/hotelinfo", async(req, res) => {
     try {
-        const { sort, reverse, destination, capacity, rating } = req.query;
+        const { sort, reverse, destination, start, end, capacity, minPrice, maxPrice, rating, chainName } = req.query;
         const orderDirection = reverse === "true" ? "DESC" : "ASC";
 
         console.log(`
-                SELECT r.room_number, h.hotel_number, h.name, h.city, h.state, h.rating, r.amenities, r.price, r.capacity 
+                SELECT r.room_number, h.hotel_number, h.name, h.city, h.state, h.rating, r.amenities, r.price, r.capacity, c.name
                 FROM hotel h JOIN hotel_room r ON h.hotel_number = r.hotel_number 
                 WHERE r.price = (
                     SELECT MIN(r2.price)
@@ -155,12 +155,17 @@ app.get("/hotelinfo", async(req, res) => {
                 ) 
                 ${destination !== "" ? `AND h.city LIKE '%${destination}%'` : ""}
                 ${capacity !== "" ? `AND r.capacity >= ${capacity}`: "" } 
-                ${rating !== "" ? `AND r.capacity >= ${rating}`: "" } 
-                ORDER BY ${sort} ${orderDirection}`)
+                ${rating !== "" ? `AND r.capacity >= ${capacity}`: "" } 
+                ${minPrice !== "" ? `AND r.price >= ${minPrice}`: "" }
+                ${maxPrice !== "" ? `AND r.price <= ${maxPrice}`: "" }
+                ${chainName !== "" ? `AND c.name LIKE '%${chainName }%'`: "" }
+                ORDER BY ${sort === "name" ? "h." : "" + sort} ${orderDirection}`)
 
         const allHotels = await pool.query(`
-                SELECT r.room_number, h.hotel_number, h.name, h.city, h.state, h.rating, r.amenities, r.price, r.capacity 
-                FROM hotel h JOIN hotel_room r ON h.hotel_number = r.hotel_number 
+                SELECT r.room_number, h.hotel_number, h.name, h.city, h.state, h.rating, r.amenities, r.price, r.capacity, c.name
+                FROM hotel h 
+                JOIN hotel_room r ON h.hotel_number = r.hotel_number
+                JOIN hotel_chain c ON h.chain_number = c.chain_number 
                 WHERE r.price = (
                     SELECT MIN(r2.price)
                     FROM hotel_room r2
@@ -168,8 +173,11 @@ app.get("/hotelinfo", async(req, res) => {
                 ) 
                 ${destination !== "" ? `AND h.city LIKE '%${destination}%'` : ""}
                 ${capacity !== "" ? `AND r.capacity >= ${capacity}`: "" } 
-                ${rating !== "" ? `r.capacity >= ${capacity}`: "" } 
-                ORDER BY ${sort} ${orderDirection}`)
+                ${rating !== "" ? `AND r.capacity >= ${capacity}`: "" } 
+                ${minPrice !== "" ? `AND r.price >= ${minPrice}`: "" }
+                ${maxPrice !== "" ? `AND r.price <= ${maxPrice}`: "" }
+                ${chainName !== "" ? `AND c.name LIKE '%${chainName}%'`: "" }
+                ORDER BY ${sort === "name" ? "h." : ""}${sort} ${orderDirection}`)
 
         res.json(allHotels.rows);
     } catch (error) {
@@ -220,6 +228,7 @@ app.get("/employees/:id", async(req, res) => {
         console.error(error.message);
     }
 });
+
 
 // Create an employee
 app.post("/employees", async(req, res) => {
@@ -284,6 +293,7 @@ app.put("/reservations/:id", async (req, res) => {
     }
 });
 
+//delete reservation
 app.delete("/reservations/:id", async (req, res) => {
     try {
         const { id } = req.params;
@@ -291,6 +301,60 @@ app.delete("/reservations/:id", async (req, res) => {
             "DELETE FROM reservation WHERE reservation_id = ${id}"
             `);
         res.json({ message: "Reservation deleted successfully" });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Server Error");
+    }
+});
+
+// get all reservations for a hotel room
+app.get("/hotelrooms/:id/reservations", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const reservations = await pool.query(`
+            "SELECT * FROM reservation WHERE hotel_room_id = ${id} "
+            `);
+        res.json(reservations.rows);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Server Error");
+    }
+});
+
+
+//Search
+//prob wont work 
+app.get("/search", async (req, res) => {
+    try {
+        // Retrieve query parameters for sorting
+        // 'sort' can be "name", "rating", or "price"
+        // 'order' can be "ASC" (default) or "DESC"
+        const { sort = "name", order = "ASC" } = req.query;
+
+        // Map sort parameter to a specific column name
+        let sortColumn;
+        if (sort === "name") {
+            sortColumn = "h.name";
+        } else if (sort === "rating") {
+            sortColumn = "h.rating";
+        } else if (sort === "price") {
+            sortColumn = "r.price";
+        } else {
+            sortColumn = "h.name"; // default sort column
+        }
+
+        // Ensure the order direction is valid
+        const orderDirection = order.toUpperCase() === "DESC" ? "DESC" : "ASC";
+
+        // Query joining hotel and hotel_room tables and sorting by the specified column
+        const results = await pool.query(`
+            SELECT h.name, h.rating, r.price, h.hotel_number, h.city, h.state
+            FROM hotel h
+            JOIN hotel_room r ON h.hotel_number = r.hotel_number
+            ORDER BY ${sortColumn} ${orderDirection};
+        `);
+
+        res.json(results.rows);
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Server Error");
