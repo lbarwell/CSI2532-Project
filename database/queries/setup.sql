@@ -128,6 +128,25 @@ ALTER TABLE hotel
   REFERENCES employee (employee_id);
 
 
+-- Implementing indexing 
+-- Index sur reservation(customer_sin)
+-- Cet index permet de localiser rapidement toutes les réservations effectuées par un client spécifique.
+-- Nous prévoyons que les requêtes récupérant l'historique des réservations d'un utilisateur 
+-- (par exemple, GET /users/:id/reservations) bénéficieront de cet index, car il réduit la recherche sur la colonne customer_sin.
+CREATE INDEX idx_reservation_customer ON reservation(customer_sin);
+
+-- Index sur hotel(chain_number)
+-- Cet index accélère les requêtes qui filtrent ou joignent les données sur l'identifiant de la chaîne hôtelière.
+-- Par exemple, lorsqu'on recherche tous les hôtels appartenant à une chaîne spécifique ou lors de jointures entre les tables hotel et hotel_chain,
+-- l'index sur chain_number aide le moteur de base de données à trouver rapidement les enregistrements correspondants.
+CREATE INDEX idx_hotel_chain_number ON hotel(chain_number);
+
+-- Index sur reservation(hotel_room_id)
+-- Cet index est utile pour les requêtes qui récupèrent les réservations d'une chambre d'hôtel spécifique.
+-- Il est particulièrement pertinent lorsque plusieurs réservations sont associées à une même chambre,
+-- par exemple dans les cas où l'on affiche toutes les réservations d'une chambre via l'endpoint GET /hotelrooms/:id/reservations.
+CREATE INDEX idx_reservation_hotel_room ON reservation(hotel_room_id);
+
 
 -- Insert values into tables
 

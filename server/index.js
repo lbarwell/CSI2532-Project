@@ -28,17 +28,21 @@ app.get("/hotelchains", async(req, res) => {
     }
 });
 
-// Get a hotel chain by ID
+// Get a hotel chain by ID (using index on hotel.chain_number)
 app.get("/hotelchains/:id", async(req, res) => {
     try {
         const { id } = req.params;
-        const hotelChain = await pool.query(`SELECT * FROM hotel_chain WHERE chain_number = ${id}`);
-
+        const hotelChain = await pool.query(
+            'SELECT * FROM hotel_chain WHERE chain_number = $1',
+            [id]
+        );
         res.json(hotelChain.rows);
     } catch (error) {
         console.error(error.message);
+        res.status(500).send("Server Error");
     }
 });
+
 
 // Create a hotel chain
 app.post("/hotelchains", async(req, res) => {
@@ -58,9 +62,7 @@ app.post("/hotelchains", async(req, res) => {
 app.delete("/hotelchains/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        // Delete hotels that reference the hotel chain first
         await pool.query('DELETE FROM hotel WHERE chain_number = $1', [id]);
-        // Then delete the hotel chain
         await pool.query('DELETE FROM hotel_chain WHERE chain_number = $1', [id]);
         res.json({ message: "Hotel chain and associated hotels deleted successfully" });
     } catch (error) {
@@ -475,19 +477,36 @@ app.delete("/reservations/:id", async (req, res) => {
     }
 });
 
-// get all reservations for a hotel room
+// Get all reservations for a hotel room (using index on reservation.hotel_room_id)
 app.get("/hotelrooms/:id/reservations", async (req, res) => {
     try {
         const { id } = req.params;
-        const reservations = await pool.query(`
-            SELECT * FROM reservation WHERE hotel_room_id = ${id} 
-            `);
+        const reservations = await pool.query(
+            'SELECT * FROM reservation WHERE hotel_room_id = $1',
+            [id]
+        );
         res.json(reservations.rows);
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Server Error");
     }
 });
+
+// Get all reservations for a given user (using index on reservation.customer_sin)
+app.get("/users/:id/reservations", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const reservations = await pool.query(
+            'SELECT * FROM reservation WHERE customer_sin = $1',
+            [id]
+        );
+        res.json(reservations.rows);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Server Error");
+    }
+});
+
 
 
 //Search
