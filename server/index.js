@@ -299,22 +299,18 @@ app.get("/users", async (req, res) => {
 // Get a user by ID
 app.get("/users/:id", async (req, res) => {
     try {
-        // Explicitly convert the parameter to an integer
         const id = parseInt(req.params.id, 10);
         
         if (isNaN(id)) {
             return res.status(400).json({ message: "Invalid user ID" });
         }
-        
         const userResult = await pool.query(
             'SELECT * FROM "user" WHERE social_insurance_number = $1',
             [id]
         );
-        
         if (userResult.rows.length === 0) {
             return res.status(404).json({ message: "User not found" });
         }
-        
         res.json(userResult.rows[0]);
     } catch (error) {
         console.error(error.message);
@@ -345,15 +341,30 @@ app.post("/users", async (req, res) => {
         const newUser = await pool.query(
             `INSERT INTO "user" 
             (social_insurance_number, first_name, last_name, street_number, street_name, apt_number, city, state, zip_code, email, phone_number, creation_date)
-            VALUES (${social_insurance_number}, ${first_name}, ${last_name}, ${street_number},${street_name}, ${apt_number}, ${city}, ${state}, ${zip_code}, ${email}, ${phone_number}, ${creation_date})
-            RETURNING *;`
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+            RETURNING *;`,
+            [
+                social_insurance_number,
+                first_name,
+                last_name,
+                street_number,
+                street_name,
+                apt_number,
+                city,
+                state,
+                zip_code,
+                email,
+                phone_number,
+                creation_date
+            ]
         );
-        res.json(newUser.rows[0]);
+        res.status(201).json(newUser.rows[0]);
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Server Error");
     }
 });
+
 
 // Delete a user by user_id (social_insurance_number)
 app.delete("/users/:id", async (req, res) => {
@@ -405,40 +416,50 @@ app.get("/reservations/:hotelroom_id", async(req, res) => {
     }
 });
 
-// Create Reservations 
-app.post("/reservations", async(req, res) => {
+app.post("/reservations", async (req, res) => {
     try {
         const { res_id, customer, hotel_room_id, status, start_date, end_date, reservation_date } = req.body;
-        const newReservation = await pool.query(`INSERT INTO reservation 
-            (reservation_id, customer_sin, hotel_room_id, status, start_date, end_date, reservation_date ) VALUES 
-            (${res_id}, ${customer}, ${hotel_room_id}, '${status}', ${start_date}, ${end_date}, ${reservation_dat}) RETURNING *`);
-
-        res.json(newReservation.rows);
+        const newReservation = await pool.query(
+            `INSERT INTO reservation 
+            (reservation_id, customer_sin, hotel_room_id, status, start_date, end_date, reservation_date)
+            VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
+            [res_id, customer, hotel_room_id, status, start_date, end_date, reservation_date]
+        );
+        res.status(201).json(newReservation.rows[0]);
     } catch (error) {
         console.error(error.message);
+        res.status(500).send("Server Error");
     }
 });
+
 
 // Update Reservation
 app.put("/reservations/:id", async (req, res) => {
     try {
         const { id } = req.params;
         const { status, start_date, end_date, hotel_room_id } = req.body;
-        const updatedReservation = await pool.query(`
-        UPDATE reservation
-        SET status = '${status}',
-            start_date = ${start_date},
-            end_date = ${end_date},
-            hotel_room_id = ${hotel_room_id}
-        WHERE reservation_id = ${id};
-        `, [status, start_date, end_date, hotel_room_id, id]);
+        const updatedReservation = await pool.query(
+            `UPDATE reservation
+             SET status = $1,
+                 start_date = $2,
+                 end_date = $3,
+                 hotel_room_id = $4
+             WHERE reservation_id = $5
+             RETURNING *;`,
+            [status, start_date, end_date, hotel_room_id, id]
+        );
+
+        if (updatedReservation.rows.length === 0) {
+            return res.status(404).json({ message: "Reservation not found" });
+        }
 
         res.json(updatedReservation.rows[0]);
     } catch (error) {
         console.error(error.message);
-        res.status(3000).send("Server Error");
+        res.status(500).send("Server Error");
     }
 });
+
 
 //delete reservation
 app.delete("/reservations/:id", async (req, res) => {
