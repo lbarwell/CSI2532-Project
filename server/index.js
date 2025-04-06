@@ -111,19 +111,21 @@ app.post("/hotels", async(req, res) => {
     }
 });
 
-// Delete a hotel by hotel_number
+// delete hotel
 app.delete("/hotels/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        await pool.query(`
-            DELETE FROM hotel WHERE hotel_number = ${id}
-            `);
-        res.json({ message: "Hotel deleted successfully" });
+        // Delete hotel rooms that reference the hotel first
+        await pool.query('DELETE FROM hotel_room WHERE hotel_number = $1', [id]);
+        // Then delete the hotel
+        await pool.query('DELETE FROM hotel WHERE hotel_number = $1', [id]);
+        res.json({ message: "Hotel and associated hotel rooms deleted successfully" });
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Server Error");
     }
 });
+
 
 // # Hotel room # //
 
@@ -357,15 +359,26 @@ app.post("/users", async (req, res) => {
 app.delete("/users/:id", async (req, res) => {
     try {
         const { id } = req.params;
+        
+        // Delete employees that reference this user first
         await pool.query(
-            `DELETE FROM "user" WHERE social_insurance_number = ${id}`
+            'DELETE FROM employee WHERE user_id = $1',
+            [id]
         );
-        res.json({ message: "User deleted successfully" });
+        
+        // Then delete the user
+        await pool.query(
+            'DELETE FROM "user" WHERE social_insurance_number = $1',
+            [id]
+        );
+        
+        res.json({ message: "User and associated employee records deleted successfully" });
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Server Error");
     }
 });
+
 
 
 // # Reservations # //
