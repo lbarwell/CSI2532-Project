@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import HiltonImage from "../assets/hilton-montreal.avif";
+import { serverPort } from "../context";
 
 interface Props {
   roomID: number;
@@ -8,27 +9,33 @@ interface Props {
 interface Room {
   amenities: string;
   city: string;
+  extendable: boolean;
   imageSrc: any;
   name: string;
   price: number;
   rating: number;
   state: string;
+  view: string;
 }
 
 const HotelPanel = ({ roomID }: Props) => {
   const [room, setRoom] = useState<Room>({
     amenities: "",
     city: "",
+    extendable: false,
     imageSrc: HiltonImage,
     name: "",
     price: 0,
     rating: 0,
     state: "",
+    view: "",
   });
 
   const getRoomInfo = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/hotelinfo/${roomID}`);
+      const response = await fetch(
+        `http://localhost:${serverPort}/hotelinfo/${roomID}`
+      );
       const jsonData = await response.json();
 
       setRoom(jsonData[0]);
@@ -62,6 +69,11 @@ const HotelPanel = ({ roomID }: Props) => {
           <div className="col-3" style={{ textAlign: "right" }}>
             {room.rating} stars
           </div>
+        </div>
+
+        <div className="row">
+          <p>{room.view}</p>
+          <p>{room.extendable ? "Extendable room" : "Not extendable"}</p>
         </div>
 
         <div

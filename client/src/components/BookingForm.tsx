@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { serverPort } from "../context";
 
 interface Props {
   roomID: number;
@@ -23,7 +24,7 @@ const BookingForm = (roomID: Props) => {
       ).toString();
 
       const response = await fetch(
-        `http://localhost:5000/reservations?${params}`
+        `http://localhost:${serverPort}/reservations?${params}`
       );
       const jsonData = await response.json();
 

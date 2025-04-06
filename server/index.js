@@ -4,7 +4,7 @@ const cors = require("cors");
 const pool = require("./db");
 
 // Port to listen on
-const port = 5000;
+const port = 3000;
 
 // App setup
 const app = express();
@@ -215,7 +215,7 @@ app.get("/hotelinfo/:id", async(req, res) => {
         const { id } = req.params;
 
         const roomInfo = await pool.query(`
-                SELECT h.name, h.city, h.state, h.rating, r.amenities, r.price 
+                SELECT h.name, h.city, h.state, h.rating, r.amenities, r.price, r.view, r.extendable
                 FROM hotel h JOIN hotel_room r ON h.hotel_number = r.hotel_number 
                 WHERE r.hotel_room_id = ${id}`)
 

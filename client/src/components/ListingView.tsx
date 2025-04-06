@@ -3,6 +3,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 
 import Listing from "./Listing";
 import HiltonImage from "../assets/hilton-montreal.avif";
+import { serverPort } from "../context";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
@@ -53,7 +54,9 @@ const ListingView = () => {
         filters as Record<string, string>
       ).toString();
 
-      const response = await fetch(`http://localhost:5000/hotelinfo?${params}`);
+      const response = await fetch(
+        `http://localhost:${serverPort}/hotelinfo?${params}`
+      );
       const jsonData = await response.json();
 
       setHotels(jsonData);
