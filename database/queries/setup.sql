@@ -170,3 +170,10 @@ INSERT INTO employee (employee_id, user_id, hotel_number, role, password) VALUES
 (3, 456789123, 3, 'Manager', 'pass9101'),
 (4, 321654987, 4, 'Manager', 'pass1121'),
 (5, 654321789, 5, 'Manager', 'pass3141');
+
+INSERT INTO reservation (reservation_id, customer_sin, hotel_room_id, status, start_date, end_date, reservation_date) VALUES
+(1, 123456789, 1, 'Confirmed', '2024-06-01', '2024-06-05', '2024-05-01'),
+(2, 987654321, 2, 'Cancelled', '2024-07-10', '2024-07-15', '2024-06-20'),
+(3, 456789123, 3, 'Pending', '2024-08-05', '2024-08-10', '2024-07-15'),
+(4, 321654987, 4, 'Confirmed', '2024-09-01', '2024-09-03', '2024-08-20'),
+(5, 654321789, 5, 'Confirmed', '2024-10-15', '2024-10-20', '2024-09-30');

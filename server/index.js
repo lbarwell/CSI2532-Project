@@ -394,10 +394,10 @@ app.get("/reservations", async (req, res) => {
 });
 
 // Get an reservations by Hotel ID
-app.get("/reservations/:hotel_id", async(req, res) => {
+app.get("/reservations/:hotelroom_id", async(req, res) => {
     try {
-        const { hotel_id } = req.params;
-        const reservation = await pool.query(`SELECT * FROM reservation WHERE reservation_id = ${hotel_id}`);
+        const { hotelroom_id } = req.params;
+        const reservation = await pool.query(`SELECT * FROM reservation WHERE reservation_id = ${hotelroom_id}`);
 
         res.json(reservation.rows);
     } catch (error) {
