@@ -3,9 +3,16 @@ import HotelPanel from "../components/HotelPanel";
 import BookingForm from "../components/BookingForm";
 import UserCreationForm from "../components/UserCreationForm";
 import { useParams } from "react-router-dom";
+import { useState } from "react";
 
 const BookingPage = () => {
   const { hotelID } = useParams();
+  const [startDate, setStartDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
+  const [endDate, setEndDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
 
   return (
     <>
@@ -16,8 +23,18 @@ const BookingPage = () => {
             <HotelPanel roomID={Number(hotelID)} />
           </div>
           <div className="col">
-            <BookingForm roomID={Number(hotelID)} />
-            <UserCreationForm />
+            <BookingForm
+              roomID={Number(hotelID)}
+              startDate={startDate}
+              setStartDate={setStartDate}
+              endDate={endDate}
+              setEndDate={setEndDate}
+            />
+            <UserCreationForm
+              roomID={Number(hotelID)}
+              startDate={startDate}
+              endDate={endDate}
+            />
           </div>
         </div>
       </div>

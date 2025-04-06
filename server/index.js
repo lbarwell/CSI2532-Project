@@ -399,16 +399,6 @@ app.delete("/users/:id", async (req, res) => {
 
 // # Reservations # //
 
-app.get("/reservations", async (req, res) => {
-    try {
-        const reservationsResult = await pool.query('SELECT * FROM reservation');
-        res.json(reservationsResult.rows);
-    } catch (error) {
-        console.error(error.message);
-        res.status(500).send("Server Error");
-    }
-});
-
 // Get a reservation by Hotel ID
 app.get("/reservations", async(req, res) => {
     try {
@@ -434,14 +424,15 @@ app.get("/reservations/:hotel_id", async(req, res) => {
     }
 });
 
+// Create a reservation
 app.post("/reservations", async (req, res) => {
     try {
-        const { res_id, customer, hotel_room_id, status, start_date, end_date, reservation_date } = req.body;
+        const { customer, hotel_room_id, status, start_date, end_date, reservation_date } = req.body;
         const newReservation = await pool.query(
             `INSERT INTO reservation 
-            (reservation_id, customer_sin, hotel_room_id, status, start_date, end_date, reservation_date)
-            VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
-            [res_id, customer, hotel_room_id, status, start_date, end_date, reservation_date]
+            (customer_sin, hotel_room_id, status, start_date, end_date, reservation_date)
+            VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+            [customer, hotel_room_id, status, start_date, end_date, reservation_date]
         );
         res.status(201).json(newReservation.rows[0]);
     } catch (error) {

@@ -90,7 +90,7 @@ ALTER TABLE hotel_room
 
 -- 6) RESERVATION (joins USER and HOTEL_ROOM)
 CREATE TABLE reservation (
-    reservation_id INT PRIMARY KEY,
+    reservation_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     customer_sin   INT,
     hotel_room_id  INT,
     status         VARCHAR(15),

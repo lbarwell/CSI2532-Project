@@ -3,16 +3,19 @@ import { serverPort } from "../context";
 
 interface Props {
   roomID: number;
+  startDate: string;
+  setStartDate: React.Dispatch<React.SetStateAction<string>>;
+  endDate: string;
+  setEndDate: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const BookingForm = (roomID: Props) => {
-  const [startDate, setStartDate] = useState(
-    new Date().toISOString().split("T")[0]
-  );
-  const [endDate, setEndDate] = useState(
-    new Date().toISOString().split("T")[0]
-  );
-
+const BookingForm = ({
+  roomID,
+  startDate,
+  setStartDate,
+  endDate,
+  setEndDate,
+}: Props) => {
   const [availability, setAvailability] = useState<boolean | null>(null);
 
   const getAvailability = async (filters: {
@@ -92,7 +95,7 @@ const BookingForm = (roomID: Props) => {
             style={{ width: "100%", marginTop: "2em" }}
             onClick={() =>
               getAvailability({
-                id: roomID.roomID,
+                id: roomID,
                 start: startDate,
                 end: endDate,
               })
