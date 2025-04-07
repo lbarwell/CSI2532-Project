@@ -57,7 +57,9 @@ npm install express pg cors # Install the required node modules
 npx run index.js # Run the server
 ```
 
-If the installation was successful, the server will reply with 'Server has started on port ...'
+If the installation was successful, the server will reply with 'Server has started on port ...'.
+
+Note: if the default port (3000) is already in use, you can change the port number by editing server/port.js.
 
 ### Client
 
