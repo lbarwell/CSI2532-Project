@@ -103,12 +103,14 @@ CREATE TABLE reservation (
 ALTER TABLE reservation
   ADD CONSTRAINT fk_reservation_user
   FOREIGN KEY (customer_sin)
-  REFERENCES "user" (social_insurance_number);
+  REFERENCES "user" (social_insurance_number)
+  ON DELETE CASCADE;
 
 ALTER TABLE reservation
   ADD CONSTRAINT fk_reservation_room
   FOREIGN KEY (hotel_room_id)
-  REFERENCES hotel_room (hotel_room_id);
+  REFERENCES hotel_room (hotel_room_id)
+  ON DELETE CASCADE;
 
 
 

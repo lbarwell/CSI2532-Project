@@ -55,7 +55,6 @@ const EmployeePage = () => {
       const response = await fetch(`http://localhost:${serverPort}/all${name}`);
       const jsonData = await response.json();
 
-      console.log(jsonData);
       const headers = Object.keys(jsonData[0]);
       const values = jsonData.map((row) => Object.values(row));
 
