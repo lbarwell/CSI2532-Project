@@ -7,11 +7,8 @@ Project name: e-Hotels
 | FIRST NAME            | LAST NAME             |
 | --------------------- | --------------------- |
 | Ludovic               | Beauregard Barwell    |
-| --------------------- | --------------------- |
 | Arij                  | Karoui                |
-| --------------------- | --------------------- |
 | Ibrahima              | Badiane               |
-| --------------------- | --------------------- |
 
 ## Overview
 
