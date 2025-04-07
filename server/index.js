@@ -17,32 +17,6 @@ app.use(express.json());
 
 // # Hotel chain # //
 
-// Get all hotel chains
-app.get("/hotelchains", async(req, res) => {
-    try {
-        const allHotelChains = await pool.query(`SELECT * FROM hotel_chain`)
-
-        res.json(allHotelChains.rows);
-    } catch (error) {
-        console.error(error.message);
-    }
-});
-
-// Get a hotel chain by ID (using index on hotel.chain_number)
-app.get("/hotelchains/:id", async(req, res) => {
-    try {
-        const { id } = req.params;
-        const hotelChain = await pool.query(
-            'SELECT * FROM hotel_chain WHERE chain_number = $1',
-            [id]
-        );
-        res.json(hotelChain.rows);
-    } catch (error) {
-        console.error(error.message);
-        res.status(500).send("Server Error");
-    }
-});
-
 
 // Create a hotel chain
 app.post("/hotelchains", async(req, res) => {
@@ -76,29 +50,6 @@ app.delete("/hotelchains/:id", async (req, res) => {
 
 // # Hotel # //
 
-// Get all hotels
-app.get("/hotels", async(req, res) => {
-    try {
-        const allHotels = await pool.query(`SELECT * FROM hotel`)
-
-        res.json(allHotels.rows);
-    } catch (error) {
-        console.error(error.message);
-    }
-});
-
-// Get a hotel by ID
-app.get("/hotels/:id", async(req, res) => {
-    try {
-        const { id } = req.params;
-        const hotel = await pool.query(`SELECT * FROM hotel WHERE hotel_number = ${id}`);
-
-        res.json(hotel.rows);
-    } catch (error) {
-        console.error(error.message);
-    }
-});
-
 // Create a hotel
 app.post("/hotels", async(req, res) => {
     try {
@@ -130,29 +81,6 @@ app.delete("/hotels/:id", async (req, res) => {
 
 
 // # Hotel room # //
-
-// Get all hotel rooms
-app.get("/hotelrooms", async(req, res) => {
-    try {
-        const allHotelRooms = await pool.query(`SELECT * FROM hotel_room`)
-
-        res.json(allHotelRooms.rows);
-    } catch (error) {
-        console.error(error.message);
-    }
-});
-
-// Get a hotel room by id
-app.get("/hotelrooms/:id", async(req, res) => {
-    try {
-        const { id } = req.params;
-        const hotelRoom = await pool.query(`SELECT * FROM hotel_room WHERE hotel_room_id = ${id}`);
-
-        res.json(hotelRoom.rows);
-    } catch (error) {
-        console.error(error.message);
-    }
-});
 
 // Create a hotel room
 app.post("/hotelrooms", async(req, res) => {
@@ -215,6 +143,7 @@ app.get("/hotelinfo", async(req, res) => {
     }
 });
 
+
 // # Hotel booking information query # //
 // Get hotel information by id
 app.get("/hotelinfo/:id", async(req, res) => {
@@ -235,17 +164,6 @@ app.get("/hotelinfo/:id", async(req, res) => {
 
 
 // # Employee # //
-
-// Get all employees
-app.get("/employees", async(req, res) => {
-    try {
-        const allEmployees = await pool.query(`SELECT * FROM employee`)
-
-        res.json(allEmployees.rows);
-    } catch (error) {
-        console.error(error.message);
-    }
-});
 
 // Get an employee by ID
 app.get("/employees/:id", async(req, res) => {
@@ -293,42 +211,8 @@ app.delete("/employees/:id", async (req, res) => {
     }
 });
 
+
 // # Users # //
-
-// get all users 
-app.get("/users", async (req, res) => {
-    try {
-        const usersResult = await pool.query('SELECT * FROM "user"');
-        res.json(usersResult.rows);
-    } catch (error) {
-        console.error(error.message);
-        res.status(500).send("Server Error");
-    }
-});
-
-// Get a user by ID
-app.get("/users/:id", async (req, res) => {
-    try {
-        const id = parseInt(req.params.id, 10);
-        
-        if (isNaN(id)) {
-            return res.status(400).json({ message: "Invalid user ID" });
-        }
-        const userResult = await pool.query(
-            'SELECT * FROM "user" WHERE social_insurance_number = $1',
-            [id]
-        );
-        if (userResult.rows.length === 0) {
-            return res.status(404).json({ message: "User not found" });
-        }
-        res.json(userResult.rows[0]);
-    } catch (error) {
-        console.error(error.message);
-        res.status(500).send("Server Error");
-    }
-});
-
-
 
 // Create a user
 app.post("/users", async (req, res) => {
@@ -402,22 +286,7 @@ app.delete("/users/:id", async (req, res) => {
 
 
 
-// # Reservations # //
-
-// Get a reservation by Hotel ID
-app.get("/reservations", async(req, res) => {
-    try {
-        const { id, start, end } = req.query;
-        
-        const reservation = await pool.query(`SELECT * FROM reservation WHERE hotel_room_id = ${id} AND start_date <= '${end}' AND end_date >= '${start}'`);
-
-        res.json(reservation.rows);
-    } catch (error) {
-        console.error(error.message);
-    }
-});
-
-
+// ## Get all data in a table ## //
 
 // Get all reservations
 app.get("/allreservations", async(req, res) => {
@@ -486,6 +355,21 @@ app.get("/allemployees", async(req, res) => {
 });
 
 
+
+// # Reservations # //
+
+// Get a reservation by Hotel ID
+app.get("/reservations", async(req, res) => {
+    try {
+        const { id, start, end } = req.query;
+        
+        const reservation = await pool.query(`SELECT * FROM reservation WHERE hotel_room_id = ${id} AND start_date <= '${end}' AND end_date >= '${start}'`);
+
+        res.json(reservation.rows);
+    } catch (error) {
+        console.error(error.message);
+    }
+});
 
 // Create a reservation
 app.post("/reservations", async (req, res) => {
@@ -577,46 +461,6 @@ app.get("/users/:id/reservations", async (req, res) => {
     }
 });
 
-
-
-//Search
-//prob wont work 
-app.get("/search", async (req, res) => {
-    try {
-        // Retrieve query parameters for sorting
-        // 'sort' can be "name", "rating", or "price"
-        // 'order' can be "ASC" (default) or "DESC"
-        const { sort = "name", order = "ASC" } = req.query;
-
-        // Map sort parameter to a specific column name
-        let sortColumn;
-        if (sort === "name") {
-            sortColumn = "h.name";
-        } else if (sort === "rating") {
-            sortColumn = "h.rating";
-        } else if (sort === "price") {
-            sortColumn = "r.price";
-        } else {
-            sortColumn = "h.name"; // default sort column
-        }
-
-        // Ensure the order direction is valid
-        const orderDirection = order.toUpperCase() === "DESC" ? "DESC" : "ASC";
-
-        // Query joining hotel and hotel_room tables and sorting by the specified column
-        const results = await pool.query(`
-            SELECT h.name, h.rating, r.price, h.hotel_number, h.city, h.state
-            FROM hotel h
-            JOIN hotel_room r ON h.hotel_number = r.hotel_number
-            ORDER BY ${sortColumn} ${orderDirection};
-        `);
-
-        res.json(results.rows);
-    } catch (error) {
-        console.error(error.message);
-        res.status(500).send("Server Error");
-    }
-});
 
 
 // Listen for requests
