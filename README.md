@@ -4,11 +4,11 @@ Project name: e-Hotels
 
 ## Project members
 
-| FIRST NAME            | LAST NAME             |
-| --------------------- | --------------------- |
-| Ludovic               | Beauregard Barwell    |
-| Arij                  | Karoui                |
-| Ibrahima              | Badiane               |
+| FIRST NAME            | LAST NAME             | Github username |
+| --------------------- | --------------------- | ----------------|
+| Ludovic               | Beauregard Barwell    | lbarwell        |
+| Arij                  | Karoui                | Arij-Karoui     |
+| Ibrahima              | Badiane               | Ibrahim-44      |
 
 ## Overview
 
