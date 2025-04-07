@@ -1,11 +1,14 @@
-const EmployeeView = () => {
-  const employee = {
-    firstName: "Ryan",
-    lastName: "Gosling",
-    hotel: "Boston Hotel",
-    role: "Clerk",
-    ID: 123456,
-  };
+import { useParams } from "react-router-dom";
+
+interface Props {
+  first_name: string;
+  last_name: string;
+  hotel_name: string;
+  role: string;
+}
+
+const EmployeeView = ({ first_name, last_name, hotel_name, role }: Props) => {
+  const { employeeID } = useParams();
 
   return (
     <div
@@ -25,13 +28,13 @@ const EmployeeView = () => {
           Employee information
         </h5>
         <p className="card-text">
-          <b>Name</b> - {employee.firstName} {employee.lastName}
+          <b>Name</b> - {first_name} {last_name}
         </p>
         <p className="card-text">
-          <b>Location</b> - {employee.hotel} ({employee.role})
+          <b>Location</b> - {hotel_name} ({role})
         </p>
         <p className="card-text">
-          <b>Employee ID</b> - {employee.ID}
+          <b>Employee ID</b> - {employeeID}
         </p>
       </div>
     </div>

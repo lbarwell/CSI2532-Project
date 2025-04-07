@@ -174,7 +174,7 @@ const UserCreationForm = ({ roomID, startDate, endDate }: Props) => {
 
         <div className="col-md-4">
           <label htmlFor="validationCustom02" className="form-label">
-            phone_number number
+            Phone number
           </label>
           <input
             type="number"
@@ -258,7 +258,7 @@ const UserCreationForm = ({ roomID, startDate, endDate }: Props) => {
 
         <div className="col-md-2">
           <label htmlFor="validationCustom04" className="form-label">
-            zip_code code
+            zip code
           </label>
           <input
             type="text"

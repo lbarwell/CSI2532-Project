@@ -1,11 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import TableView from "../components/tableView";
 import EmployeeView from "../components/EmployeeView";
-
-interface Props {
-  isLoggedIn: boolean;
-}
+import { useParams } from "react-router-dom";
+import { serverPort } from "../context";
 
 interface Table {
   tableName: string;
@@ -13,40 +11,75 @@ interface Table {
   tableData: any[][];
 }
 
-const EmployeePage = ({ isLoggedIn }: Props) => {
-  const [table, setTable] = useState<Table>({tableName: "No data", headers: [], tableData: []});
-  const [activeView, setActiveView] = useState("reservations");
+interface Employee {
+  first_name: string;
+  last_name: string;
+  name: string;
+  role: string;
+}
 
-  const getReservations = async() => {
+const EmployeePage = () => {
+  const [table, setTable] = useState<Table>({
+    tableName: "No data",
+    headers: [],
+    tableData: [],
+  });
+  const [activeView, setActiveView] = useState("reservations");
+  const { employeeID } = useParams();
+  const [employee, setEmployee] = useState<Employee>({
+    first_name: "",
+    last_name: "",
+    name: "",
+    role: "",
+  });
+
+  const getEmployee = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:${serverPort}/employees/${employeeID}`
+      );
+      const jsonData = await response.json();
+
+      console.log(jsonData);
+
+      setEmployee(jsonData[0]);
+    } catch (error: any) {
+      console.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    getEmployee();
+  }, []);
+
+  const getReservations = async () => {
     try {
       const response = await fetch(`http://localhost:5000/reservations`);
       const jsonData = await response.json();
 
-      const headers = jsonData[0].keys()
-      const [values] = jsonData.values()
+      const headers = jsonData[0].keys();
+      const [values] = jsonData.values();
 
-      setTable({ tableName: "reservations", headers: headers, tableData: values});
+      setTable({
+        tableName: "reservations",
+        headers: headers,
+        tableData: values,
+      });
     } catch (error: any) {
       console.error(error.message);
     }
-  }
-
-  if (!isLoggedIn) {
-    return (
-      <>
-        <Navbar />
-        <h2 style={{ width: "20%", marginTop: "10%", margin: "auto" }}>
-          <a href="#/login">Login</a> required
-        </h2>
-      </>
-    );
-  }
+  };
 
   return (
     <>
       <Navbar />
 
-      <EmployeeView />
+      <EmployeeView
+        first_name={employee.first_name}
+        last_name={employee.last_name}
+        hotel_name={employee.name}
+        role={employee.role}
+      />
 
       <ul className="nav nav-tabs" style={{ margin: "3em" }}>
         <li className="nav-item">
@@ -56,7 +89,7 @@ const EmployeePage = ({ isLoggedIn }: Props) => {
             }`}
             onClick={() => {
               getReservations();
-              setActiveView("reservations")
+              setActiveView("reservations");
             }}
           >
             Reservations

@@ -251,7 +251,18 @@ app.get("/employees", async(req, res) => {
 app.get("/employees/:id", async(req, res) => {
     try {
         const { id } = req.params;
-        const employee = await pool.query(`SELECT * FROM employee WHERE employee_id = ${id}`);
+
+        console.log(`
+            SELECT e.employee_id, u.first_name, u.last_name, h.name, e.role FROM employee e 
+            JOIN hotel h ON e.hotel_number = h.hotel_number 
+            JOIN "user" u ON e.user_id = u.social_insurance_number 
+            WHERE employee_id = $1`)
+
+        const employee = await pool.query(`
+            SELECT e.employee_id, u.first_name, u.last_name, h.name, e.role FROM employee e 
+            JOIN hotel h ON e.hotel_number = h.hotel_number 
+            JOIN "user" u ON e.user_id = u.social_insurance_number 
+            WHERE employee_id = $1`, [id]);
 
         res.json(employee.rows);
     } catch (error) {

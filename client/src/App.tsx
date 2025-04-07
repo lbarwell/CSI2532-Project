@@ -6,7 +6,6 @@ import EmployeePage from "./pages/EmployeePage";
 import BookingPage from "./pages/BookingPage";
 import LoginPage from "./pages/LoginPage";
 import { useState } from "react";
-import { LoginContext } from "./context";
 
 function App() {
   const [isLoggedIn, setLoggedIn] = useState(false);
@@ -17,19 +16,8 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path={`/booking/:hotelID`} element={<BookingPage />} />
-        <Route
-          path="/login"
-          element={
-            <LoginContext.Provider value={{ isLoggedIn, setLoggedIn }}>
-              <LoginPage />
-            </LoginContext.Provider>
-          }
-        />
-
-        <Route
-          path="/employees/:employeeID"
-          element={<EmployeePage isLoggedIn={isLoggedIn} />}
-        />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/employees/:employeeID" element={<EmployeePage />} />
       </Routes>
     </Router>
   );
