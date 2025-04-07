@@ -252,12 +252,6 @@ app.get("/employees/:id", async(req, res) => {
     try {
         const { id } = req.params;
 
-        console.log(`
-            SELECT e.employee_id, u.first_name, u.last_name, h.name, e.role FROM employee e 
-            JOIN hotel h ON e.hotel_number = h.hotel_number 
-            JOIN "user" u ON e.user_id = u.social_insurance_number 
-            WHERE employee_id = $1`)
-
         const employee = await pool.query(`
             SELECT e.employee_id, u.first_name, u.last_name, h.name, e.role FROM employee e 
             JOIN hotel h ON e.hotel_number = h.hotel_number 
@@ -423,17 +417,75 @@ app.get("/reservations", async(req, res) => {
     }
 });
 
-// Get a reservation by Hotel ID
-app.get("/reservations/:hotel_id", async(req, res) => {
-    try {
-        const { hotelroom_id } = req.params;
-        const reservation = await pool.query(`SELECT * FROM reservation WHERE reservation_id = ${hotelroom_id}`);
 
-        res.json(reservation.rows);
+
+// Get all reservations
+app.get("/allreservations", async(req, res) => {
+    try {
+        const allReservations = await pool.query(`SELECT * FROM reservation`);
+
+        res.json(allReservations.rows);
     } catch (error) {
         console.error(error.message);
     }
 });
+
+// Get all hotels
+app.get("/allhotels", async(req, res) => {
+    try {
+        const allHotels = await pool.query(`SELECT * FROM hotel`);
+
+        res.json(allHotels.rows);
+    } catch (error) {
+        console.error(error.message);
+    }
+});
+
+// Get all hotel chains
+app.get("/allchains", async(req, res) => {
+    try {
+        const allChains = await pool.query(`SELECT * FROM hotel_chain`);
+
+        res.json(allChains.rows);
+    } catch (error) {
+        console.error(error.message);
+    }
+});
+
+// Get all hotel rooms
+app.get("/allrooms", async(req, res) => {
+    try {
+        const allRooms = await pool.query(`SELECT * FROM hotel_room`);
+
+        res.json(allRooms.rows);
+    } catch (error) {
+        console.error(error.message);
+    }
+});
+
+// Get all users
+app.get("/allusers", async(req, res) => {
+    try {
+        const allUsers = await pool.query(`SELECT * FROM "user"`);
+
+        res.json(allUsers.rows);
+    } catch (error) {
+        console.error(error.message);
+    }
+});
+
+// Get all employees
+app.get("/allemployees", async(req, res) => {
+    try {
+        const allEmployees = await pool.query(`SELECT * FROM employee`);
+
+        res.json(allEmployees.rows);
+    } catch (error) {
+        console.error(error.message);
+    }
+});
+
+
 
 // Create a reservation
 app.post("/reservations", async (req, res) => {

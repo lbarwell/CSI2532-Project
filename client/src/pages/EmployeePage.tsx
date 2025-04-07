@@ -40,8 +40,6 @@ const EmployeePage = () => {
       );
       const jsonData = await response.json();
 
-      console.log(jsonData);
-
       setEmployee(jsonData[0]);
     } catch (error: any) {
       console.error(error.message);
@@ -52,16 +50,17 @@ const EmployeePage = () => {
     getEmployee();
   }, []);
 
-  const getReservations = async () => {
+  const getTableData = async (name: string) => {
     try {
-      const response = await fetch(`http://localhost:5000/reservations`);
+      const response = await fetch(`http://localhost:${serverPort}/all${name}`);
       const jsonData = await response.json();
 
-      const headers = jsonData[0].keys();
-      const [values] = jsonData.values();
+      console.log(jsonData);
+      const headers = Object.keys(jsonData[0]);
+      const values = jsonData.map((row) => Object.values(row));
 
       setTable({
-        tableName: "reservations",
+        tableName: name,
         headers: headers,
         tableData: values,
       });
@@ -69,6 +68,10 @@ const EmployeePage = () => {
       console.error(error.message);
     }
   };
+
+  useEffect(() => {
+    getTableData("reservations");
+  }, []);
 
   return (
     <>
@@ -88,7 +91,7 @@ const EmployeePage = () => {
               activeView === "reservations" ? "active" : ""
             }`}
             onClick={() => {
-              getReservations();
+              getTableData("reservations");
               setActiveView("reservations");
             }}
           >
@@ -99,6 +102,7 @@ const EmployeePage = () => {
           <button
             className={`nav-link ${activeView === "hotels" ? "active" : ""}`}
             onClick={() => {
+              getTableData("hotels");
               setActiveView("hotels");
             }}
           >
@@ -107,8 +111,22 @@ const EmployeePage = () => {
         </li>
         <li className="nav-item">
           <button
+            className={`nav-link ${activeView === "chains" ? "active" : ""}`}
+            onClick={() => {
+              getTableData("chains");
+              setActiveView("chains");
+            }}
+          >
+            Hotel chains
+          </button>
+        </li>
+        <li className="nav-item">
+          <button
             className={`nav-link ${activeView === "rooms" ? "active" : ""}`}
-            onClick={() => setActiveView("rooms")}
+            onClick={() => {
+              getTableData("rooms");
+              setActiveView("rooms");
+            }}
           >
             Rooms
           </button>
@@ -116,7 +134,10 @@ const EmployeePage = () => {
         <li className="nav-item">
           <button
             className={`nav-link ${activeView === "customers" ? "active" : ""}`}
-            onClick={() => setActiveView("customers")}
+            onClick={() => {
+              getTableData("users");
+              setActiveView("customers");
+            }}
           >
             Customers
           </button>
@@ -124,7 +145,10 @@ const EmployeePage = () => {
         <li className="nav-item">
           <button
             className={`nav-link ${activeView === "employees" ? "active" : ""}`}
-            onClick={() => setActiveView("employees")}
+            onClick={() => {
+              getTableData("employees");
+              setActiveView("employees");
+            }}
           >
             Employees
           </button>

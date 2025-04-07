@@ -157,11 +157,50 @@ INSERT INTO hotel_chain (chain_number, name, street_number, street_name, city, s
 
 -- Insert into hotel
 INSERT INTO hotel (hotel_number, name, chain_number, street_number, street_name, city, state, zip_code, email, phone, manager_id, rating) VALUES
-(1, 'Luxury Stays Downtown', 1, 120, 'Wall St', 'New York', 'NY', '10005', 'manager@luxurystays.com', '2125557890', NULL, 5),
-(2, 'Budget Inn Central', 2, 220, 'Mission St', 'San Francisco', 'CA', '94110', 'manager@budgetinn.com', '4155556789', NULL, 3),
-(3, 'Comfort Suites North', 3, 330, 'Lake Shore Dr', 'Chicago', 'IL', '60611', 'manager@comfortsuites.com', '3125552345', NULL, 4),
-(4, 'Elite Hotels Bay Area', 4, 440, 'Pike St', 'Seattle', 'WA', '98102', 'manager@elitehotels.com', '2065556789', NULL, 5),
-(5, 'Grand Resorts Beachfront', 5, 550, 'Collins Ave', 'Miami', 'FL', '33140', 'manager@grandresorts.com', '3055558765', NULL, 5);
+(1, 'Ocean Breeze Inn', 1, 120, 'Seaside Blvd', 'Santa Monica', 'CA', '90401', 'ocean1@staymail.com', '3105551001', NULL, 5),
+(2, 'Palm Garden Hotel', 1, 120, 'Sunset Ave', 'Long Beach', 'CA', '90802', 'palm2@staymail.com', '3105551002', NULL, 5),
+(3, 'Coastal Comfort Suites', 1, 120, 'Harbor St', 'Newport Beach', 'CA', '92660', 'coastal3@staymail.com', '3105551003', NULL, 5),
+(4, 'Beachfront Palace', 1, 130, 'PCH Blvd', 'Venice', 'CA', '90291', 'beachfront4@staymail.com', '3105551004', NULL, 5),
+(5, 'Sunset Horizon Hotel', 1, 140, 'Ocean Ave', 'Malibu', 'CA', '90265', 'sunset5@staymail.com', '3105551005', NULL, 5),
+(6, 'Sandy Shores Resort', 1, 150, 'Beach Rd', 'Santa Barbara', 'CA', '93101', 'sandy6@staymail.com', '3105551006', NULL, 5),
+(7, 'Harborview Inn', 1, 160, 'Marine St', 'Laguna Beach', 'CA', '92651', 'harborview7@staymail.com', '3105551007', NULL, 5),
+(8, 'Pacific Bay Resort', 1, 170, 'Ocean Front Walk', 'Santa Monica', 'CA', '90402', 'pacific8@staymail.com', '3105551008', NULL, 5),
+
+(9, 'Urban Nest Suites', 2, 220, 'Broadway Ave', 'Denver', 'CO', '80203', 'urban9@nestmail.com', '7205552009', NULL, 3),
+(10, 'Cityview Inn', 2, 220, 'Lincoln St', 'Boulder', 'CO', '80302', 'cityview10@nestmail.com', '7205552010', NULL, 3),
+(11, 'Downtown Vibe Hotel', 2, 220, '16th St', 'Aurora', 'CO', '80010', 'vibe11@nestmail.com', '7205552011', NULL, 3),
+(12, 'Mountain Peak Lodge', 2, 230, 'Elm St', 'Colorado Springs', 'CO', '80903', 'peak12@nestmail.com', '7205552012', NULL, 3),
+(13, 'Riverside Inn', 2, 240, 'River Rd', 'Fort Collins', 'CO', '80524', 'riverside13@nestmail.com', '7205552013', NULL, 3),
+(14, 'Vibrant City Hotel', 2, 250, 'Park Ave', 'Denver', 'CO', '80203', 'vibrant14@nestmail.com', '7205552014', NULL, 3),
+(15, 'Skyline Suites', 2, 260, 'Glenwood Ave', 'Broomfield', 'CO', '80021', 'skyline15@nestmail.com', '7205552015', NULL, 3),
+(16, 'Golden Peak Resort', 2, 270, 'Cascade Ave', 'Colorado Springs', 'CO', '80903', 'golden16@nestmail.com', '7205552016', NULL, 3),
+
+(17, 'Maple Leaf Inn', 3, 330, 'Queen St', 'Toronto', 'ON', 'M5V1Z4', 'maple17@canadastay.ca', '4165553001', NULL, 4),
+(18, 'Northern Comfort Lodge', 3, 330, 'King St', 'Ottawa', 'ON', 'K1P5J9', 'northern18@canadastay.ca', '4165553002', NULL, 4),
+(19, 'Harborview Hotel', 3, 330, 'Bay St', 'Mississauga', 'ON', 'L5B3Y3', 'harbor19@canadastay.ca', '4165553003', NULL, 4),
+(20, 'Tranquil Waters Resort', 3, 340, 'Lakeview St', 'Hamilton', 'ON', 'L8P1J6', 'tranquil20@canadastay.ca', '4165553004', NULL, 4),
+(21, 'Lakefront Lodge', 3, 350, 'Shoreline Dr', 'Vancouver', 'BC', 'V5K1G7', 'lakefront21@canadastay.ca', '4165553005', NULL, 4),
+(22, 'Highland Park Inn', 3, 360, 'Cedar Ave', 'Toronto', 'ON', 'M4E2N1', 'highland22@canadastay.ca', '4165553006', NULL, 4),
+(23, 'Whistler Peak Resort', 3, 370, 'Mountain Rd', 'Whistler', 'BC', 'V0N1B3', 'whistler23@canadastay.ca', '4165553007', NULL, 4),
+(24, 'Shoreline Suites', 3, 380, 'Beach Ave', 'Victoria', 'BC', 'V8W1N5', 'shoreline24@canadastay.ca', '4165553008', NULL, 4),
+
+(25, 'Cedar Point Hotel', 4, 440, 'Bay St', 'Vancouver', 'BC', 'V6B2W9', 'cedar25@weststay.com', '6045554001', NULL, 5),
+(26, 'Pacific Horizon Inn', 4, 440, 'Granville St', 'Richmond', 'BC', 'V7C4N2', 'horizon26@weststay.com', '6045554002', NULL, 5),
+(27, 'Harbor Lights Hotel', 4, 440, 'Robson St', 'Burnaby', 'BC', 'V5C6P6', 'harbor27@weststay.com', '6045554003', NULL, 5),
+(28, 'Seabreeze Resort', 4, 450, 'Ocean Dr', 'White Rock', 'BC', 'V4B1C4', 'seabreeze28@weststay.com', '6045554004', NULL, 5),
+(29, 'Skyline Resort', 4, 460, 'Sunset Blvd', 'North Vancouver', 'BC', 'V7L1B1', 'skyline29@weststay.com', '6045554005', NULL, 5),
+(30, 'Golden Bay Inn', 4, 470, 'Pacific Ave', 'Surrey', 'BC', 'V3T1X6', 'golden30@weststay.com', '6045554006', NULL, 5),
+(31, 'Riverfront Lodge', 4, 480, 'River Rd', 'Abbotsford', 'BC', 'V2S1X1', 'riverfront31@weststay.com', '6045554007', NULL, 5),
+(32, 'Coastline Suites', 4, 490, 'Seaview Dr', 'Richmond', 'BC', 'V7E3A3', 'coastline32@weststay.com', '6045554008', NULL, 5),
+
+(33, 'Sapphire Shores Resort', 5, 550, 'Ocean Dr', 'San Diego', 'CA', '92109', 'sapphire33@beachresort.com', '8585555001', NULL, 5),
+(34, 'Golden Sands Retreat', 5, 550, 'Palm Ave', 'Santa Cruz', 'CA', '95060', 'golden34@beachresort.com', '8585555002', NULL, 5),
+(35, 'Coral Cove Hotel', 5, 550, 'Shoreline Blvd', 'Monterey', 'CA', '93940', 'coral35@beachresort.com', '8585555003', NULL, 5),
+(36, 'Sunset Bay Inn', 5, 560, 'Coast Rd', 'Santa Barbara', 'CA', '93109', 'sunset36@beachresort.com', '8585555004', NULL, 5),
+(37, 'Coco Beach Resort', 5, 570, 'Oceanfront Blvd', 'Laguna Beach', 'CA', '92651', 'coco37@beachresort.com', '8585555005', NULL, 5),
+(38, 'Bayside Retreat', 5, 580, 'Harbor Dr', 'San Diego', 'CA', '92101', 'bayside38@beachresort.com', '8585555006', NULL, 5),
+(39, 'Island Paradise Resort', 5, 590, 'Tropical St', 'Palm Springs', 'CA', '92262', 'island39@beachresort.com', '8585555007', NULL, 5),
+(40, 'Lagoon View Hotel', 5, 600, 'Lagoon Rd', 'Santa Monica', 'CA', '90403', 'lagoon40@beachresort.com', '8585555008', NULL, 5);
 
 -- Insert into hotel_room
 INSERT INTO hotel_room (hotel_room_id, room_number, hotel_number, price, capacity, amenities, view, extendable, known_issues) VALUES
@@ -169,7 +208,91 @@ INSERT INTO hotel_room (hotel_room_id, room_number, hotel_number, price, capacit
 (2, 102, 1, 180.00, 2, 'WiFi, TV', 'Garden View', FALSE, 'Leaky faucet'),
 (3, 201, 2, 100.00, 1, 'WiFi, TV', 'Street View', TRUE, NULL),
 (4, 301, 3, 150.00, 2, 'WiFi, TV, Coffee Maker', 'Lake View', FALSE, NULL),
-(5, 401, 4, 220.00, 3, 'WiFi, TV, Jacuzzi', 'Bay View', TRUE, NULL);
+(5, 401, 4, 220.00, 3, 'WiFi, TV, Jacuzzi', 'Bay View', TRUE, NULL),
+-- Hotel 1 (Ocean Breeze Inn)
+INSERT INTO hotel_room (hotel_room_id, room_number, hotel_number, price, capacity, amenities, view, extendable, known_issues) VALUES
+(1, 101, 1, 150, 2, 'WiFi, AC, TV', 'Ocean View', true, NULL),
+(2, 102, 1, 180, 3, 'WiFi, AC, TV, Mini-fridge', 'Sea View', true, NULL),
+(3, 103, 1, 220, 4, 'WiFi, AC, TV, Balcony', 'Ocean View', false, 'Faint water leak'),
+(4, 104, 1, 250, 2, 'WiFi, AC, TV, King Bed', 'Sea View', true, NULL),
+(5, 105, 1, 300, 5, 'WiFi, AC, TV, Jacuzzi', 'Ocean View', false, NULL),
+
+-- Hotel 2 (Palm Garden Hotel)
+(6, 201, 2, 140, 2, 'WiFi, AC, TV', 'Garden View', true, NULL),
+(7, 202, 2, 160, 3, 'WiFi, AC, TV, Mini-fridge', 'Pool View', true, NULL),
+(8, 203, 2, 210, 4, 'WiFi, AC, TV, Balcony', 'Garden View', false, NULL),
+(9, 204, 2, 230, 2, 'WiFi, AC, TV, King Bed', 'Pool View', true, NULL),
+(10, 205, 2, 280, 5, 'WiFi, AC, TV, Jacuzzi', 'Garden View', false, 'Minor plumbing issues'),
+
+-- Hotel 3 (Coastal Comfort Suites)
+(11, 301, 3, 160, 2, 'WiFi, AC, TV', 'Ocean View', true, NULL),
+(12, 302, 3, 180, 3, 'WiFi, AC, TV, Mini-fridge', 'Sea View', true, NULL),
+(13, 303, 3, 230, 4, 'WiFi, AC, TV, Balcony', 'Ocean View', false, NULL),
+(14, 304, 3, 270, 2, 'WiFi, AC, TV, King Bed', 'Sea View', true, NULL),
+(15, 305, 3, 320, 5, 'WiFi, AC, TV, Jacuzzi', 'Ocean View', false, 'Faint electrical issue'),
+
+-- Hotel 4 (Urban Nest Suites)
+(16, 401, 4, 130, 2, 'WiFi, AC, TV', 'City View', true, NULL),
+(17, 402, 4, 150, 3, 'WiFi, AC, TV, Mini-fridge', 'Street View', true, NULL),
+(18, 403, 4, 200, 4, 'WiFi, AC, TV, Balcony', 'City View', false, NULL),
+(19, 404, 4, 220, 2, 'WiFi, AC, TV, King Bed', 'Street View', true, NULL),
+(20, 405, 4, 270, 5, 'WiFi, AC, TV, Jacuzzi', 'City View', false, 'Water pressure fluctuation'),
+
+-- Hotel 5 (Cityview Inn)
+(21, 501, 5, 170, 2, 'WiFi, AC, TV', 'Garden View', true, NULL),
+(22, 502, 5, 190, 3, 'WiFi, AC, TV, Mini-fridge', 'Park View', true, NULL),
+(23, 503, 5, 240, 4, 'WiFi, AC, TV, Balcony', 'Garden View', false, NULL),
+(24, 504, 5, 260, 2, 'WiFi, AC, TV, King Bed', 'Park View', true, NULL),
+(25, 505, 5, 310, 5, 'WiFi, AC, TV, Jacuzzi', 'Garden View', false, 'Minor heating issue'),
+
+-- Hotel 6 (Downtown Vibe Hotel)
+(26, 601, 6, 180, 2, 'WiFi, AC, TV', 'Downtown View', true, NULL),
+(27, 602, 6, 200, 3, 'WiFi, AC, TV, Mini-fridge', 'Street View', true, NULL),
+(28, 603, 6, 240, 4, 'WiFi, AC, TV, Balcony', 'Downtown View', false, NULL),
+(29, 604, 6, 260, 2, 'WiFi, AC, TV, King Bed', 'Street View', true, NULL),
+(30, 605, 6, 310, 5, 'WiFi, AC, TV, Jacuzzi', 'Downtown View', false, 'Minor plumbing issues'),
+
+-- Hotel 7 (Maple Leaf Inn)
+(31, 701, 7, 200, 2, 'WiFi, AC, TV', 'Forest View', true, NULL),
+(32, 702, 7, 220, 3, 'WiFi, AC, TV, Mini-fridge', 'Mountain View', true, NULL),
+(33, 703, 7, 260, 4, 'WiFi, AC, TV, Balcony', 'Forest View', false, NULL),
+(34, 704, 7, 280, 2, 'WiFi, AC, TV, King Bed', 'Mountain View', true, NULL),
+(35, 705, 7, 330, 5, 'WiFi, AC, TV, Jacuzzi', 'Forest View', false, 'Faint electrical issue'),
+
+-- Hotel 8 (Northern Comfort Lodge)
+(36, 801, 8, 170, 2, 'WiFi, AC, TV', 'River View', true, NULL),
+(37, 802, 8, 190, 3, 'WiFi, AC, TV, Mini-fridge', 'Forest View', true, NULL),
+(38, 803, 8, 240, 4, 'WiFi, AC, TV, Balcony', 'River View', false, NULL),
+(39, 804, 8, 260, 2, 'WiFi, AC, TV, King Bed', 'Forest View', true, NULL),
+(40, 805, 8, 310, 5, 'WiFi, AC, TV, Jacuzzi', 'River View', false, 'Minor heating issue'),
+
+-- Hotel 9 (Harborview Hotel)
+(41, 901, 9, 190, 2, 'WiFi, AC, TV', 'Lake View', true, NULL),
+(42, 902, 9, 210, 3, 'WiFi, AC, TV, Mini-fridge', 'City View', true, NULL),
+(43, 903, 9, 250, 4, 'WiFi, AC, TV, Balcony', 'Lake View', false, NULL),
+(44, 904, 9, 270, 2, 'WiFi, AC, TV, King Bed', 'City View', true, NULL),
+(45, 905, 9, 320, 5, 'WiFi, AC, TV, Jacuzzi', 'Lake View', false, 'Faint water leak'),
+
+-- Hotel 10 (Cedar Point Hotel)
+(46, 1001, 10, 220, 2, 'WiFi, AC, TV', 'Mountain View', true, NULL),
+(47, 1002, 10, 240, 3, 'WiFi, AC, TV, Mini-fridge', 'Park View', true, NULL),
+(48, 1003, 10, 280, 4, 'WiFi, AC, TV, Balcony', 'Mountain View', false, NULL),
+(49, 1004, 10, 300, 2, 'WiFi, AC, TV, King Bed', 'Park View', true, NULL),
+(50, 1005, 10, 350, 5, 'WiFi, AC, TV, Jacuzzi', 'Mountain View', false, 'Minor plumbing issues'),
+
+-- Hotel 11 (Pacific Horizon Inn)
+(51, 1101, 11, 180, 2, 'WiFi, AC, TV', 'Bay View', true, NULL),
+(52, 1102, 11, 200, 3, 'WiFi, AC, TV, Mini-fridge', 'City View', true, NULL),
+(53, 1103, 11, 240, 4, 'WiFi, AC, TV, Balcony', 'Bay View', false, NULL),
+(54, 1104, 11, 260, 2, 'WiFi, AC, TV, King Bed', 'City View', true, NULL),
+(55, 1105, 11, 300, 5, 'WiFi, AC, TV, Jacuzzi', 'Bay View', false, 'Faint electrical issue'),
+
+-- Hotel 12 (Harbor Lights Hotel)
+(56, 1201, 12, 200, 2, 'WiFi, AC, TV', 'Ocean View', true, NULL),
+(57, 1202, 12, 220, 3, 'WiFi, AC, TV, Mini-fridge', 'Bay View', true, NULL),
+(58, 1203, 12, 260, 4, 'WiFi, AC, TV, Balcony', 'Ocean View', false, NULL),
+(59, 1204, 12, 280, 2, 'WiFi, AC, TV, King Bed', 'Bay View', true, NULL),
+(60, 1205, 12, 320, 5, 'WiFi, AC, TV, Jacuzzi', 'Ocean View', false, 'Minor plumbing issues');
 
 -- Insert into user
 INSERT INTO "user" (social_insurance_number, first_name, last_name, street_number, street_name, apt_number, city, state, zip_code, email, phone_number, creation_date) VALUES
