@@ -202,13 +202,6 @@ INSERT INTO hotel (hotel_number, name, chain_number, street_number, street_name,
 (39, 'Island Paradise Resort', 5, 590, 'Tropical St', 'Palm Springs', 'CA', '92262', 'island39@beachresort.com', '8585555007', NULL, 5),
 (40, 'Lagoon View Hotel', 5, 600, 'Lagoon Rd', 'Santa Monica', 'CA', '90403', 'lagoon40@beachresort.com', '8585555008', NULL, 5);
 
--- Insert into hotel_room
-INSERT INTO hotel_room (hotel_room_id, room_number, hotel_number, price, capacity, amenities, view, extendable, known_issues) VALUES
-(1, 101, 1, 200.00, 2, 'WiFi, TV, Minibar', 'City View', TRUE, NULL),
-(2, 102, 1, 180.00, 2, 'WiFi, TV', 'Garden View', FALSE, 'Leaky faucet'),
-(3, 201, 2, 100.00, 1, 'WiFi, TV', 'Street View', TRUE, NULL),
-(4, 301, 3, 150.00, 2, 'WiFi, TV, Coffee Maker', 'Lake View', FALSE, NULL),
-(5, 401, 4, 220.00, 3, 'WiFi, TV, Jacuzzi', 'Bay View', TRUE, NULL),
 -- Hotel 1 (Ocean Breeze Inn)
 INSERT INTO hotel_room (hotel_room_id, room_number, hotel_number, price, capacity, amenities, view, extendable, known_issues) VALUES
 (1, 101, 1, 150, 2, 'WiFi, AC, TV', 'Ocean View', true, NULL),
@@ -310,9 +303,9 @@ INSERT INTO employee (employee_id, user_id, hotel_number, role, password) VALUES
 (4, 321654987, 4, 'Manager', 'pass1121'),
 (5, 654321789, 5, 'Manager', 'pass3141');
 
-Insert INTO reservation (reservation_id, customer_sin, hotel_room_id, status, start_date, end_date, reservation_date)
-VALUES (2,123456789,3,'reserved','2025-04-10','2025-04-12','2025-04-01'),
-(1,987654321,1,'active','2025-04-06','2025-04-12','2025-03-30'),
-(5,456789123,5,'reserved','2025-04-12','2025-04-17','2025-04-04'),
-(3,321654987,2,'active','2025-04-06','2025-04-10','2025-04-02'),
-(4,654321789,4,'archived','2025-03-31','2025-04-03','2025-03-25')
+Insert INTO reservation (customer_sin, hotel_room_id, status, start_date, end_date, reservation_date)
+VALUES (123456789,3,'reserved','2025-04-10','2025-04-12','2025-04-01'),
+(987654321,1,'active','2025-04-06','2025-04-12','2025-03-30'),
+(456789123,5,'reserved','2025-04-12','2025-04-17','2025-04-04'),
+(321654987,2,'active','2025-04-06','2025-04-10','2025-04-02'),
+(654321789,4,'archived','2025-03-31','2025-04-03','2025-03-25')
