@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { serverPort } from "../context";
-import { useState } from "react";
 
 interface Props {
   tableName: string;

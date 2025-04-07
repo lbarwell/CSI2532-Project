@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { serverPort } from "../context";
+import { useNavigate } from "react-router-dom";
 
 interface UserData {
   social_insurance_number: number;
@@ -23,6 +24,7 @@ interface Props {
 }
 
 const UserCreationForm = ({ roomID, startDate, endDate }: Props) => {
+  const navigate = useNavigate();
   const [availability, setAvailability] = useState<boolean>(false);
 
   const getAvailability = async (filters: {
@@ -82,6 +84,8 @@ const UserCreationForm = ({ roomID, startDate, endDate }: Props) => {
     } else {
       setError("");
       createReservation(userData);
+
+      navigate(`/`);
     }
   };
 
